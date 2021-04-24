@@ -5,7 +5,7 @@ node_js:
 cache: npm 
 branches: 
 	only: 
-		- source
+		- master
 	script: 
 		- hexo generate 
 deploy: 
@@ -14,6 +14,5 @@ deploy:
 	github-token: $GH_TOKEN 
 	keep-history: true 
 	on: 
-		branch: source
+		branch: master
 	local-dir: public
-  target_branch: master

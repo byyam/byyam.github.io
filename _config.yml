@@ -105,3 +105,6 @@ theme: next
   #type: git
   #repo: https://github.com/byyam/byyam.github.io.git
   #branch: gh-pages
+
+plantuml:
+  render: "PlantUMLServer"

@@ -468,6 +468,11 @@
     "moment" "^2.18.0"
     "nunjucks" "^3.2.1"
 
+"hexo-filter-plantuml@^2.1.0":
+  "integrity" "sha512-dYPxUdpoW0EaBm/kl3Nb7PrD9Gu+V6slXkS6MDHrPht8OMuVJAmdlZmVS7QL2LhdP/htWX0q1yrpOdgYcBVsyw=="
+  "resolved" "https://registry.npmjs.org/hexo-filter-plantuml/-/hexo-filter-plantuml-2.1.0.tgz"
+  "version" "2.1.0"
+
 "hexo-front-matter@^2.0.0":
   "integrity" "sha512-IR3tjAyK2Ga/0a/WDAoNy5+n3ju2/mkuAsCDEeGgGLf5+7kkiOkkG/FrnueuYgz0h2MPfWDLBiDsSTCmB0sLCA=="
   "resolved" "https://registry.yarnpkg.com/hexo-front-matter/-/hexo-front-matter-2.0.0.tgz"

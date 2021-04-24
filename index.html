@@ -1,23 +1,1499 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
 
-{% block title %}{{ config.title }}{% if theme.index_with_subtitle and config.subtitle %} - {{config.subtitle }}{% endif %}{% endblock %}
+<link rel="stylesheet" href="/css/main.css">
 
-{% block page_class %}
-  {% if is_home() %}page-home{% endif -%}
-{% endblock %}
 
-{% block content %}
-  <section id="posts" class="posts-expand">
-    {% for post in page.posts %}
-      {{ post_template.render(post, true) }}
-    {% endfor %}
-  </section>
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-  {% include '_partials/pagination.swig' %}
-{% endblock %}
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"byyam.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
-{% block sidebar %}
-  {{ sidebar_template.render(false) }}
-{% endblock %}
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Yam&#39;s Notebook">
+<meta property="og:url" content="https://byyam.github.io/index.html">
+<meta property="og:site_name" content="Yam&#39;s Notebook">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Yam">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://byyam.github.io/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : true,
+    isPost : false,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Yam's Notebook</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Yam's Notebook</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content index posts-expand">
+            
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2021/04/09/2021-04-10-mediasoup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/04/09/2021-04-10-mediasoup/" class="post-title-link" itemprop="url">Mediasoup</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2021-04-10T00:00:00+08:00">2021-04-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="mediasoup"><a href="#mediasoup" class="headerlink" title="mediasoup"></a>mediasoup</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>v3版本源码实现了SFU的基本转发功能，由C++部分的worker和TS部分的信令组成。这两部分之间用UNIX socket通信，是进程之间的全双工通信方式，基于文件系统，不需要走协议栈，因此必须同机部署。</p>
+<p><strong>router</strong></p>
+<p>逻辑层抽象，代表了通话的房间。</p>
+<p><strong>peer</strong></p>
+<p>逻辑层抽象，代表了通话的成员。</p>
+<p><strong>transport</strong></p>
+<p>数据层抽象，代表了一路socket层面的数据流，可以承载多个RTP stream。通常一个典型的通话里，上行和下行需要分别建立两个socket连接，就是两个transport。客户端与mediasoup之间的transport通常是<code>webrtcTransport</code>。mediasoup之间的routers也可以建立transport实现级联关系，通常是<code>pipeTransport</code>。发给GStreamer和ffmepg的为<code>plainTransport</code>。</p>
+<p>基于socket的transport在实际业务中非常浪费端口资源，一方面是因为作者并非将它设计为商业用途，另一方面mediasoup的STUN把自己也当成一个host，简单实现了协议功能。</p>
+<h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p><a href="/images/svg/mediasoup.svg">mediasoup</a><br><img src="/images/svg/mediasoup.svg"></p>
+<h2 id="实现协议"><a href="#实现协议" class="headerlink" title="实现协议"></a>实现协议</h2><p>WebRTC实现连接的ICE和能力协商的SDP都属于描述性协议，并不严格规定具体的实现。</p>
+<img src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U2NyaXB0VHlwZT0iYXBwbGljYXRpb24vZWNtYXNjcmlwdCIgY29udGVudFN0eWxlVHlwZT0idGV4dC9jc3MiIGhlaWdodD0iMTkycHgiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHN0eWxlPSJ3aWR0aDo5MHB4O2hlaWdodDoxOTJweDsiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDkwIDE5MiIgd2lkdGg9IjkwcHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzPjxmaWx0ZXIgaGVpZ2h0PSIzMDAlIiBpZD0iZjlzeGE3NG5yMTNuMSIgd2lkdGg9IjMwMCUiIHg9Ii0xIiB5PSItMSI+PGZlR2F1c3NpYW5CbHVyIHJlc3VsdD0iYmx1ck91dCIgc3RkRGV2aWF0aW9uPSIyLjAiLz48ZmVDb2xvck1hdHJpeCBpbj0iYmx1ck91dCIgcmVzdWx0PSJibHVyT3V0MiIgdHlwZT0ibWF0cml4IiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIC40IDAiLz48ZmVPZmZzZXQgZHg9IjQuMCIgZHk9IjQuMCIgaW49ImJsdXJPdXQyIiByZXN1bHQ9ImJsdXJPdXQzIi8+PGZlQmxlbmQgaW49IlNvdXJjZUdyYXBoaWMiIGluMj0iYmx1ck91dDMiIG1vZGU9Im5vcm1hbCIvPjwvZmlsdGVyPjwvZGVmcz48Zz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuMDtzdHJva2UtZGFzaGFycmF5OjUuMCw1LjA7IiB4MT0iNDciIHgyPSI0NyIgeTE9Ijg4LjI5NjkiIHkyPSIxMDguMjk2OSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9Ijc4IiB4PSI1IiB5PSI4NC45OTUxIj5tZWRpYXNvdXA8L3RleHQ+PGVsbGlwc2UgY3g9IjQ3IiBjeT0iMTUiIGZpbGw9IiNGRUZFQ0UiIGZpbHRlcj0idXJsKCNmOXN4YTc0bnIxM24xKSIgcng9IjgiIHJ5PSI4IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjIuMDsiLz48cGF0aCBkPSJNNDcsMjMgTDQ3LDUwIE0zNCwzMSBMNjAsMzEgTTQ3LDUwIEwzNCw2NSBNNDcsNTAgTDYwLDY1ICIgZmlsbD0ibm9uZSIgZmlsdGVyPSJ1cmwoI2Y5c3hhNzRucjEzbjEpIiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjIuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI3OCIgeD0iNSIgeT0iMTIwLjI5MiI+bWVkaWFzb3VwPC90ZXh0PjxlbGxpcHNlIGN4PSI0NyIgY3k9IjEzMy41OTM4IiBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZjlzeGE3NG5yMTNuMSkiIHJ4PSI4IiByeT0iOCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoyLjA7Ii8+PHBhdGggZD0iTTQ3LDE0MS41OTM4IEw0NywxNjguNTkzOCBNMzQsMTQ5LjU5MzggTDYwLDE0OS41OTM4IE00NywxNjguNTkzOCBMMzQsMTgzLjU5MzggTTQ3LDE2OC41OTM4IEw2MCwxODMuNTkzOCAiIGZpbGw9Im5vbmUiIGZpbHRlcj0idXJsKCNmOXN4YTc0bnIxM24xKSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoyLjA7Ii8+PCEtLU1ENT1bNGVhNmVlMDQzOTM2NjdiNmVjMTM3ZDgzMDFhYjNmZDJdCkBzdGFydHVtbA0KYWN0b3IgbWVkaWFzb3VwDQpAZW5kdW1sDQoKUGxhbnRVTUwgdmVyc2lvbiAxLjIwMjEuNWJldGEzKFVua25vd24gY29tcGlsZSB0aW1lKQooR1BMIHNvdXJjZSBkaXN0cmlidXRpb24pCkphdmEgUnVudGltZTogSmF2YShUTSkgU0UgUnVudGltZSBFbnZpcm9ubWVudApKVk06IEphdmEgSG90U3BvdChUTSkgNjQtQml0IFNlcnZlciBWTQpEZWZhdWx0IEVuY29kaW5nOiBVVEYtOApMYW5ndWFnZTogZW4KQ291bnRyeTogVVMKLS0+PC9nPjwvc3ZnPg=='>
+
+
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://github.com/versatica/mediasoup">源码实现</a></p>
+<p><a target="_blank" rel="noopener" href="https://mediasoup.org/">官网</a></p>
+<p><a target="_blank" rel="noopener" href="https://mediasoup.discourse.group/">官方讨论组</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/jiyeyuran/mediasoup-go">golang实现信令层</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2020/10/03/2020-10-04-rtc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/03/2020-10-04-rtc/" class="post-title-link" itemprop="url">RTC</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-04T00:00:00+08:00">2020-10-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/media/" itemprop="url" rel="index"><span itemprop="name">media</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="RTC"><a href="#RTC" class="headerlink" title="RTC"></a>RTC</h1><h2 id="RTC-Server"><a href="#RTC-Server" class="headerlink" title="RTC Server"></a>RTC Server</h2><h3 id="流媒体服务器"><a href="#流媒体服务器" class="headerlink" title="流媒体服务器"></a>流媒体服务器</h3><p>媒体数据的传输，实现实时传输的最基本功能。</p>
+<h3 id="信令服务器"><a href="#信令服务器" class="headerlink" title="信令服务器"></a>信令服务器</h3><p>管理多路用户的逻辑，将多个通信用户组建房间进行权限控制和资源管理。</p>
+<h3 id="打洞服务器"><a href="#打洞服务器" class="headerlink" title="打洞服务器"></a>打洞服务器</h3><p>为媒体传输提供更丰富的传输通道。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><strong>CDN</strong></p>
+<p>提供就近接入和媒体缓存。</p>
+<p><strong>专线</strong></p>
+<p>复杂网络情况中提升各运营商之间传输质量。</p>
+<p><img src="/images/pic/RTC.png" alt="RTC"></p>
+<h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>NAT解决了IPv4资源不足问题，将端口和IP隐藏在内网，从而提高安全性</p>
+<ol>
+<li>完全锥型</li>
+<li>IP限制型</li>
+<li>端口限制型</li>
+<li>对称型</li>
+</ol>
+<p><img src="/images/pic/STUN.png" alt="STUN"></p>
+<p>组网的网关就像一道墙，阻隔着外部host和内网host直接访问。身处两个NAT后面的host不得不借助于打洞服务器来探测和协助两个host相互访问。因此，以上4种类型的组合情况有12种。</p>
+<p><strong>完全锥形</strong>比较容易理解，就是一个四元组：</p>
+<pre><code> &#123;
+   内网IP，
+   内网端口，
+   映射的外网IP，
+   映射的外网端口
+ &#125;
+ 
+</code></pre>
+<p>这个映射四元组就是墙上的“洞”，NAT通过查找这个映射表来转发数据。完全锥形没有任何限制，内网的任何host都可以通过这个“洞”和外界通信。</p>
+<p><strong>IP限制型</strong>，多加了一个元组：</p>
+<blockquote>
+<p>被访问主机的IP</p>
+</blockquote>
+<p>即限制了内网其他IP的host不能通过这个洞。</p>
+<p><strong>端口限制型</strong>，又多加了一个元组：</p>
+<blockquote>
+<p>被访问主机的端口</p>
+</blockquote>
+<p>即限制了内网同个host的其他端口不能通过这个洞。</p>
+<p>最复杂和多变的对称型，对于同一个外网host访问内网host1和host2，它映射的IP和端口都是变化的，因此：<code>对称型—对称型</code>和<code>对称型—端口限制型</code>这两种情况在STUN中是无法穿越的。</p>
+<p>NAT穿越为媒体传输通道提供了直连的选择，同一局域网应该首选直连通道。其他情况可根据业务需求和质量情况来判断选择哪种通道。</p>
+<h2 id="多对多通信"><a href="#多对多通信" class="headerlink" title="多对多通信"></a>多对多通信</h2><h3 id="Mesh方案"><a href="#Mesh方案" class="headerlink" title="Mesh方案"></a>Mesh方案</h3><p>思想基于一对一方案，将每个host之间都建立一个连接，且每个host之间都能打通直连通道。</p>
+<p>局限性：</p>
+<ol>
+<li>现实场景中，不一定每个host之间都能建立直连通道</li>
+<li>共享媒体流的时候，将给每个对端发送一份数据，上行带宽很大</li>
+</ol>
+<h3 id="MCU方案"><a href="#MCU方案" class="headerlink" title="MCU方案"></a>MCU方案</h3><p><strong>Multipoint Conferencing Unit</strong></p>
+<p>服务器进行多路混流和重新编码，视频会议场景等，对服务器硬件要求高。<br>优势很明显，场景体验好，节省带宽资源。<br>局限性也很明显，对服务器要求高，混流过程有一定的延时。</p>
+<h3 id="SFU方案"><a href="#SFU方案" class="headerlink" title="SFU方案"></a>SFU方案</h3><p><strong>Selective Forwarding Unit</strong></p>
+<p>服务器对多路流根据实际场景进行转发。</p>
+<h3 id="传输质量"><a href="#传输质量" class="headerlink" title="传输质量"></a>传输质量</h3><p><img src="/images/pic/QoS.png" alt="QoS"></p>
+<h3 id="流媒体传输协议"><a href="#流媒体传输协议" class="headerlink" title="流媒体传输协议"></a>流媒体传输协议</h3><p>传统直播推拉流架构的主要协议：HLS和RTMP协议。</p>
+<p>由于WebRTC传输数据基于UDP协议，RTMP基于TCP协议，HLS基于HTTP协议的特点，传输实时性：<code>WebRTC(RTCP/RTP) &gt; RTMP &gt; HLS</code></p>
+<ul>
+<li>WebRTC多用于实时音视频通信或互动场景</li>
+<li>RTMP多用于推拉流场景</li>
+<li>HLS多用于拉流端和点播场景</li>
+</ul>
+<p><img src="/images/pic/HLS.png" alt="HLS"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2020/05/26/2020-05-27-golang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/26/2020-05-27-golang/" class="post-title-link" itemprop="url">Golang</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-27 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-27T00:00:00+08:00">2020-05-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="/images/svg/Golang.svg">outline</a><br><img src="/images/svg/Golang.svg"></p>
+<p><a href="/images/svg/context.svg">context</a><br><img src="/images/svg/context.svg"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2020/05/26/2020-05-27-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/26/2020-05-27-mysql/" class="post-title-link" itemprop="url">MySQL</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-27 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-27T00:00:00+08:00">2020-05-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">database</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><a href="/images/svg/MySQL.svg">outline</a><br><img src="/images/svg/MySQL.svg"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2020/05/25/2020-05-26-quic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/05/25/2020-05-26-quic/" class="post-title-link" itemprop="url">QUIC</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-26 00:00:00" itemprop="dateCreated datePublished" datetime="2020-05-26T00:00:00+08:00">2020-05-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/protocol/" itemprop="url" rel="index"><span itemprop="name">protocol</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="延迟是性能瓶颈"><a href="#延迟是性能瓶颈" class="headerlink" title="延迟是性能瓶颈"></a>延迟是性能瓶颈</h3><p>HTTP/0.9到HTTP/1.x的主要提升是丰富了方法类型。</p>
+<p>打开一个网页经过:</p>
+<ol>
+<li>DNS 查询</li>
+<li>建立连接</li>
+<li>请求</li>
+<li>响应</li>
+</ol>
+<p>HTTP/1.x的每一次请求之间是串行的，即前一个request得到响应后才能发起下一个request，耗时为所有请求和响应耗时的总和。<br>HTTP/2.x开始支持多路复用，允许在同个连接上同时发起多个request，在多个请求的情况下，耗时大大减少。</p>
+<p>HTTP/2借鉴了很多SPDY的提案，比如优先级和多路复用。</p>
+<h3 id="二进制分帧层"><a href="#二进制分帧层" class="headerlink" title="二进制分帧层"></a>二进制分帧层</h3><p>HTTP/2 所有性能增强的核心在于新的二进制分帧层，它定义了如何封装 HTTP 消息并在客户端与服务器之间传输。HTTP/2 将 HTTP 协议通信分解为二进制编码帧的交换，这些帧对应着特定数据流中的消息。所有这些都在一个 TCP 连接内复用。 这是 HTTP/2 协议所有其他功能和性能优化的基础。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a target="_blank" rel="noopener" href="https://developers.google.com/web/fundamentals/performance/http2/?hl=zh-cn">https://developers.google.com/web/fundamentals/performance/http2/?hl=zh-cn</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2020/03/06/2020-03-07-websocket/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/06/2020-03-07-websocket/" class="post-title-link" itemprop="url">WebSocket</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-07 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-07T00:00:00+08:00">2020-03-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/protocol/" itemprop="url" rel="index"><span itemprop="name">protocol</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="全双工协议"><a href="#全双工协议" class="headerlink" title="全双工协议"></a>全双工协议</h3><p>简而言之，许多应用场景需要全双工的web应用，例如：服务器主动推送和实时交互的应用。这些应用不适合在HTTP协议上实现。最好的方式是使用HTTP建立握手，之后基于TCP做长连接。</p>
+<p>与HTTP的关系是：使用了其握手机制和端口号。</p>
+<blockquote>
+<p>Relationship to TCP and HTTP</p>
+</blockquote>
+<blockquote>
+<p>   The WebSocket Protocol is an independent TCP-based protocol.  Its<br>   only relationship to HTTP is that its handshake is interpreted by<br>   HTTP servers as an Upgrade request.</p>
+</blockquote>
+<blockquote>
+<p>   By default, the WebSocket Protocol uses port 80 for regular WebSocket<br>   connections and port 443 for WebSocket connections tunneled over<br>   Transport Layer Security (TLS) [RFC2818].</p>
+</blockquote>
+<p>   <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Comparison_of_WebSocket_implementations">支持WebSocket的浏览器</a></p>
+<h3 id="握手"><a href="#握手" class="headerlink" title="握手"></a>握手</h3><p>WebSocket通过HTTP/1.1协议的101状态码握手。</p>
+<p><strong>客户端发起握手请求：</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">ws://localhost:6060/ws</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>localhost:6060</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>Upgrade   # 连接升级</span><br><span class="line"><span class="attribute">Pragma</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">Cache-Control</span><span class="punctuation">: </span>no-cache</span><br><span class="line"><span class="attribute">User-Agent</span><span class="punctuation">: </span>Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36</span><br><span class="line"><span class="attribute">Upgrade</span><span class="punctuation">: </span>websocket    # 升级到WebSocket</span><br><span class="line"><span class="attribute">Origin</span><span class="punctuation">: </span>http://localhost:6060</span><br><span class="line"><span class="attribute">Sec-WebSocket-Version</span><span class="punctuation">: </span>13   # 表示支持的WebSocket版本</span><br><span class="line"><span class="attribute">Accept-Encoding</span><span class="punctuation">: </span>gzip, deflate, br</span><br><span class="line"><span class="attribute">Accept-Language</span><span class="punctuation">: </span>zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6,zh-TW;q=0.5</span><br><span class="line"><span class="attribute">Cookie</span><span class="punctuation">: </span>wp-settings-time-1=1566626634</span><br><span class="line"><span class="attribute">Sec-WebSocket-Key</span><span class="punctuation">: </span>Omt7iN7CaEUxYdm+wlVEaA==</span><br><span class="line"><span class="attribute">Sec-WebSocket-Extensions</span><span class="punctuation">: </span>permessage-deflate; client_max_window_bits</span><br></pre></td></tr></table></figure>
+
+<p><strong>服务器回应</strong></p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">101</span> Switching Protocols</span><br><span class="line"><span class="attribute">Upgrade</span><span class="punctuation">: </span>websocket</span><br><span class="line"><span class="attribute">Connection</span><span class="punctuation">: </span>Upgrade</span><br><span class="line"><span class="attribute">Sec-WebSocket-Accept</span><span class="punctuation">: </span>ggdcU6xoySObbFCh62I2J3eRxu0=</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Sec-WebSocket-Key</code>是随机的字符串，服务器端会用这些数据来构造出一个SHA-1的信息摘要。把<code>Sec-WebSocket-Key</code>加上一个特殊字符串（固定）：<code>258EAFA5-E914-47DA-95CA-C5AB0DC85B11</code>，然后计算SHA-1摘要，之后进行BASE-64编码，将结果做为<code>Sec-WebSocket-Accept</code>头的值，返回给客户端。如此操作，可以尽量避免普通HTTP请求被误认为Websocket协议。</li>
+</ul>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 固定字符串</span></span><br><span class="line"><span class="keyword">var</span> keyGUID = []<span class="keyword">byte</span>(<span class="string">&quot;258EAFA5-E914-47DA-95CA-C5AB0DC85B11&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 服务器根据客户端请求的随机key计算Sec-WebSocket-Accept字段的值</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">computeAcceptKey</span><span class="params">(challengeKey <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	h := sha1.New()</span><br><span class="line">	h.Write([]<span class="keyword">byte</span>(challengeKey))</span><br><span class="line">	h.Write(keyGUID)</span><br><span class="line">	<span class="keyword">return</span> base64.StdEncoding.EncodeToString(h.Sum(<span class="literal">nil</span>))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 客户端生成随机key</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">generateChallengeKey</span><span class="params">()</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">	p := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">16</span>)</span><br><span class="line">	<span class="keyword">if</span> _, err := io.ReadFull(rand.Reader, p); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;&quot;</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> base64.StdEncoding.EncodeToString(p), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>Origin</code>字段是可选的，通常用来表示在浏览器中发起此Websocket连接所在的页面。</li>
+</ul>
+<h3 id="协议格式"><a href="#协议格式" class="headerlink" title="协议格式"></a>协议格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> 0                   1                   2                   3</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">+-+-+-+-+-------+-+-------------+-------------------------------+</span><br><span class="line">|F|R|R|R| opcode|M| Payload len |    Extended payload length    |</span><br><span class="line">|I|S|S|S|  (4)  |A|     (7)     |             (16&#x2F;64)           |</span><br><span class="line">|N|V|V|V|       |S|             |   (if payload len&#x3D;&#x3D;126&#x2F;127)   |</span><br><span class="line">| |1|2|3|       |K|             |                               |</span><br><span class="line">+-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +</span><br><span class="line">|     Extended payload length continued, if payload len &#x3D;&#x3D; 127  |</span><br><span class="line">+ - - - - - - - - - - - - - - - +-------------------------------+</span><br><span class="line">|                               |Masking-key, if MASK set to 1  |</span><br><span class="line">+-------------------------------+-------------------------------+</span><br><span class="line">| Masking-key (continued)       |          Payload Data         |</span><br><span class="line">+-------------------------------- - - - - - - - - - - - - - - - +</span><br><span class="line">:                     Payload Data continued ...                :</span><br><span class="line">+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +</span><br><span class="line">|                     Payload Data continued ...                |</span><br><span class="line">+---------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>FIN</code>为true表示是最后一个分片。</li>
+<li><code>RSV</code>一般情况都为0。</li>
+<li><code>opcode</code> 定义了<code>payload data</code>的类型。</li>
+<li><code>mask</code>为true表示payload是编码处理的。</li>
+<li><code>masking-key</code>编码key。</li>
+<li><code>payload length</code>表示payload的长度。</li>
+</ul>
+<p>extend为payload过长时的扩展字段。</p>
+<p>客户端发给服务器的包，必须masking：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> wordSize = <span class="keyword">int</span>(unsafe.Sizeof(<span class="keyword">uintptr</span>(<span class="number">0</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 随机生成masking-key</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newMaskKey</span><span class="params">()</span> [4]<span class="title">byte</span></span> &#123;</span><br><span class="line">	n := rand.Uint32()</span><br><span class="line">	<span class="keyword">return</span> [<span class="number">4</span>]<span class="keyword">byte</span>&#123;<span class="keyword">byte</span>(n), <span class="keyword">byte</span>(n &gt;&gt; <span class="number">8</span>), <span class="keyword">byte</span>(n &gt;&gt; <span class="number">16</span>), <span class="keyword">byte</span>(n &gt;&gt; <span class="number">24</span>)&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">maskBytes</span><span class="params">(key [4]<span class="keyword">byte</span>, pos <span class="keyword">int</span>, b []<span class="keyword">byte</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="comment">// Mask one byte at a time for small buffers.</span></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(b) &lt; <span class="number">2</span>*wordSize &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="keyword">range</span> b &#123;</span><br><span class="line">			b[i] ^= key[pos&amp;<span class="number">3</span>]</span><br><span class="line">			pos++</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> pos &amp; <span class="number">3</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Mask one byte at a time to word boundary.</span></span><br><span class="line">	<span class="keyword">if</span> n := <span class="keyword">int</span>(<span class="keyword">uintptr</span>(unsafe.Pointer(&amp;b[<span class="number">0</span>]))) % wordSize; n != <span class="number">0</span> &#123;</span><br><span class="line">		n = wordSize - n</span><br><span class="line">		<span class="keyword">for</span> i := <span class="keyword">range</span> b[:n] &#123;</span><br><span class="line">			b[i] ^= key[pos&amp;<span class="number">3</span>]</span><br><span class="line">			pos++</span><br><span class="line">		&#125;</span><br><span class="line">		b = b[n:]</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Create aligned word size key.</span></span><br><span class="line">	<span class="keyword">var</span> k [wordSize]<span class="keyword">byte</span></span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> k &#123;</span><br><span class="line">		k[i] = key[(pos+i)&amp;<span class="number">3</span>]</span><br><span class="line">	&#125;</span><br><span class="line">	kw := *(*<span class="keyword">uintptr</span>)(unsafe.Pointer(&amp;k))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Mask one word at a time.</span></span><br><span class="line">	n := (<span class="built_in">len</span>(b) / wordSize) * wordSize</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; n; i += wordSize &#123;</span><br><span class="line">		*(*<span class="keyword">uintptr</span>)(unsafe.Pointer(<span class="keyword">uintptr</span>(unsafe.Pointer(&amp;b[<span class="number">0</span>])) + <span class="keyword">uintptr</span>(i))) ^= kw</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Mask one byte at a time for remaining bytes.</span></span><br><span class="line">	b = b[n:]</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> b &#123;</span><br><span class="line">		b[i] ^= key[pos&amp;<span class="number">3</span>]</span><br><span class="line">		pos++</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> pos &amp; <span class="number">3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="控制消息"><a href="#控制消息" class="headerlink" title="控制消息"></a>控制消息</h3><p>WebSocket定义了3种类型的控制消息（control message）：close, ping and pong。</p>
+<p><strong>close</strong></p>
+<p><code>opcode</code>为0x8</p>
+<p>客户端发起的close，<code>websocket.payload.close.status_code</code>置为1000，表示normal closure。若不设置，则默认为CloseNoStatusReceived=1005。</p>
+<p>服务器收到关闭请求，响应包也发送1000。</p>
+<p>客户端收到响应后，执行TCP四次挥手过长，双方关闭TCP连接。</p>
+<p><strong>ping</strong></p>
+<p><code>opcode</code>为0x9</p>
+<p>发送方 -&gt; 接收方</p>
+<blockquote>
+<p> WebSocket为了保持客户端、服务端的实时双向通信，需要确保客户端、服务端之间的TCP通道保持连接没有断开。然而，对于长时间没有数据往来的连接，如果依旧长时间保持着，可能会浪费包括的连接资源。但不排除有些场景，客户端、服务端虽然长时间没有数据往来，但仍需要保持连接。这个时候，可以采用心跳来实现。</p>
+</blockquote>
+<blockquote>
+<p>如果客户端支持ping，最好由客户端发起ping，然后服务器记录时间，超时断开即可。浏览器中没有相关api发送ping给服务器，只能由服务器发ping给浏览器。</p>
+</blockquote>
+<p><strong>pong</strong></p>
+<p><code>opcode</code>为0xA</p>
+<p>接收方 -&gt; 发送方</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6455">https://tools.ietf.org/html/rfc6455</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/WebSocket">https://zh.wikipedia.org/wiki/WebSocket</a></p>
+<p><a target="_blank" rel="noopener" href="https://godoc.org/github.com/gorilla/websocket">https://godoc.org/github.com/gorilla/websocket</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2019/08/19/2019-08-14-use-brook/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/08/19/2019-08-14-use-brook/" class="post-title-link" itemprop="url">Use of Brook</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-08-20 00:00:00" itemprop="dateCreated datePublished" datetime="2019-08-20T00:00:00+08:00">2019-08-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/how2use/" itemprop="url" rel="index"><span itemprop="name">how2use</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><em><strong>声明：仅用于交流学习技术</strong></em></p>
+<h3 id="购买服务器（此部分略）"><a href="#购买服务器（此部分略）" class="headerlink" title="购买服务器（此部分略）"></a>购买服务器（此部分略）</h3><h3 id="BBR"><a href="#BBR" class="headerlink" title="BBR"></a>BBR</h3><p>若服务器支持BBR，可使用以下命令一键安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line">wget –no-check-certificate https:&#x2F;&#x2F;github.com&#x2F;teddysun&#x2F;across&#x2F;raw&#x2F;master&#x2F;bbr.sh</span><br><span class="line">chmod +x bbr.sh</span><br><span class="line">.&#x2F;bbr.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="server端debug模式"><a href="#server端debug模式" class="headerlink" title="server端debug模式"></a>server端debug模式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;brook -d servers -l &quot;:port password&quot;</span><br></pre></td></tr></table></figure>
+<p>查看防火墙状态命令：<code>firewall-cmd --state</code></p>
+<p>停止firewall命令：<code>systemctl stop firewalld.service</code></p>
+<p>禁止firewall开机启动命令：<code>systemctl disable firewalld.service</code></p>
+<h3 id="客户端debug连接测试"><a href="#客户端debug连接测试" class="headerlink" title="客户端debug连接测试"></a>客户端debug连接测试</h3><p>建立隧道</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;brook_darwin_amd64 -d tunnel -l 127.0.0.1:1080 -t 8.8.8.8:53 -s server-ip:server-port -p password</span><br></pre></td></tr></table></figure>
+<p>dig测试UDP和TCP是否连通</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># UDP</span><br><span class="line">dig google.com @127.0.0.1 -p 1080</span><br><span class="line"></span><br><span class="line"># TCP</span><br><span class="line">dig +tcp google.com @127.0.0.1 -p 1080</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用GUI-client"><a href="#使用GUI-client" class="headerlink" title="使用GUI client"></a>使用GUI client</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew cask install brook</span><br></pre></td></tr></table></figure>
+
+<p>每次启动进程时，都会在自动代理里添加：<code>https://blackwhite.txthinking.com/white.pac</code></p>
+<p>即添加访问规则</p>
+<h3 id="terminal使用代理"><a href="#terminal使用代理" class="headerlink" title="terminal使用代理"></a>terminal使用代理</h3><p>在~/.bash_profile后添加配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export http_proxy&#x3D;socks5:&#x2F;&#x2F;127.0.0.1:1080</span><br><span class="line">export https_proxy&#x3D;socks5:&#x2F;&#x2F;127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+
+<p>source使之立即生效</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2017/12/24/2017-12-24-job-scheduling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2017/12/24/2017-12-24-job-scheduling/" class="post-title-link" itemprop="url">Job scheduling</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-12-24 23:00:00" itemprop="dateCreated datePublished" datetime="2017-12-24T23:00:00+08:00">2017-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/algorithms/" itemprop="url" rel="index"><span itemprop="name">algorithms</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>Job scheduling</strong></p>
+<p><strong>作业调度</strong></p>
+<h2 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h2><p>多个作业进程（或服务器，后称为process）可处理相同的任务，并具有不同的处理能力。</p>
+<h3 id="假设"><a href="#假设" class="headerlink" title="假设"></a>假设</h3><table>
+<thead>
+<tr>
+<th>进程（服务器）</th>
+<th>处理能力</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>4</td>
+</tr>
+<tr>
+<td>B</td>
+<td>3</td>
+</tr>
+<tr>
+<td>C</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>在一轮任务（Job）的分配中，均衡的分配给每一个process。</p>
+<p>处理能力可认为是分配权重weight。</p>
+<h2 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h2><h3 id="加权轮询调度"><a href="#加权轮询调度" class="headerlink" title="加权轮询调度"></a>加权轮询调度</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Supposing that there is a server set S &#x3D; &#123;S0, S1, …, Sn-1&#125;;</span><br><span class="line">W(Si) indicates the weight of Si;</span><br><span class="line">i indicates the server selected last time, and i is initialized with -1;</span><br><span class="line">cw is the current weight in scheduling, and cw is initialized with zero; </span><br><span class="line">max(S) is the maximum weight of all the servers in S;</span><br><span class="line">gcd(S) is the greatest common divisor of all server weights in S;</span><br><span class="line"></span><br><span class="line">while (true) &#123;</span><br><span class="line">    i &#x3D; (i + 1) mod n;</span><br><span class="line">    if (i &#x3D;&#x3D; 0) &#123;</span><br><span class="line">        cw &#x3D; cw - gcd(S); </span><br><span class="line">        if (cw &lt;&#x3D; 0) &#123;</span><br><span class="line">            cw &#x3D; max(S);</span><br><span class="line">            if (cw &#x3D;&#x3D; 0)</span><br><span class="line">            return NULL;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    if (W(Si) &gt;&#x3D; cw) </span><br><span class="line">        return Si;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果是<code>AABABCABC</code></p>
+<p>这个算法的两个技巧：</p>
+<ol>
+<li>gcd最大公约数：相当于算法的步长。比如权重为1000，100，10的三个process，分配时可以认为它们是权重为100，10，1.最大公约数为10，循环执行10次的效果是一样的。</li>
+<li>当W(Si) &gt;= cw时，才返回Si。这样做的效果是，不同process中优先调用高于其他weight的部分，当所有process剩下的weight相等时，按顺序循环调用。</li>
+</ol>
+<h3 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h3><p><a target="_blank" rel="noopener" href="https://gist.github.com/byyam/6fe49cc9861b9134025c8234517f778a">python实现</a></p>
+<h3 id="更为随机的加权轮询调度"><a href="#更为随机的加权轮询调度" class="headerlink" title="更为随机的加权轮询调度"></a>更为随机的加权轮询调度</h3><p>设想<code>A，B，C</code>的权值分别为<code>5，1，1</code>的情景下，以上的调度算法输出为<code>AAAAABC</code></p>
+<p>定义：</p>
+<ol>
+<li>每个process的动态当前权值current weight为cw</li>
+<li>每个process的固有权值weight为w</li>
+<li>参加轮询的process的weight之和为sw</li>
+</ol>
+<p>算法：</p>
+<ol>
+<li>每个cw初始值为0</li>
+<li>每个cw = cw + w</li>
+<li>被选中的process为cw最大的，被选中后cw的值被惩罚为该process的cw减去sw，而其他process的cw保持不变。即max(cw) - sw</li>
+<li>若所有process的cw都为0，则一轮结束。否则，进行下一步</li>
+<li>跳到第2步</li>
+</ol>
+<p>运算：</p>
+<p>奇数行根据最大的current weight选择process</p>
+<p>被选中的cw被高亮标出</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>5</code></td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>-2</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>-4</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>1</td>
+<td><code>3</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>1</td>
+<td>-4</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>6</code></td>
+<td>-3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>-3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>-2</td>
+<td><code>5</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>-2</td>
+<td>-2</td>
+</tr>
+<tr>
+<td><code>9</code></td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>-1</td>
+<td>-1</td>
+</tr>
+<tr>
+<td><code>7</code></td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+<p>技巧：</p>
+<ol>
+<li>算法里循环执行的<code>cw = cw + w</code>和<code>max（cw）-sw</code>两个步骤确保了cw之和等于sw，循环次数为<code>sw</code>次</li>
+<li>和上一个算法相比，该算法每次让被选出来的process尽可能的排在最后面，确保了不会有连续的被选中</li>
+</ol>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p>加权轮询调度算法：</p>
+<p><a target="_blank" rel="noopener" href="http://kb.linuxvirtualserver.org/wiki/Weighted_Round-Robin_Scheduling">http://kb.linuxvirtualserver.org/wiki/Weighted_Round-Robin_Scheduling</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2015/09/19/2015-09-19-how-to-post-on-gitpages/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2015/09/19/2015-09-19-how-to-post-on-gitpages/" class="post-title-link" itemprop="url">使用GitPage管理博客</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-09-19 13:37:00" itemprop="dateCreated datePublished" datetime="2015-09-19T13:37:00+08:00">2015-09-19</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/how2use/" itemprop="url" rel="index"><span itemprop="name">how2use</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>本文只介绍时下主流的几种工具，其他静态页面生成器的也可灵活运用，托管于GitPage</strong></p>
+<h1 id="Jekyll"><a href="#Jekyll" class="headerlink" title="Jekyll"></a>Jekyll</h1><p>特点：官方推荐，Ruby环境</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3><p>根据官方文档,</p>
+<p><a target="_blank" rel="noopener" href="https://pages.github.com/">https://pages.github.com/</a></p>
+<p>创建一个同名的仓库。</p>
+<h3 id="Jekyll的使用"><a href="#Jekyll的使用" class="headerlink" title="Jekyll的使用"></a>Jekyll的使用</h3><p>On Ubuntu,</p>
+<pre><code>$sudo apt-get install ruby ruby-dev nodejs gem
+$sudo gem install jekyll
+</code></pre>
+<p>On Mac,</p>
+<pre><code>$brew install ruby
+$gem install jekyll
+</code></pre>
+<p>创建blog,</p>
+<pre><code>$jekyll new myblog
+$cd myblod
+$jekyll serve
+</code></pre>
+<p>可以在这里换主题,</p>
+<p><a target="_blank" rel="noopener" href="http://jekyllthemes.org/">http://jekyllthemes.org/</a></p>
+<p><code>_posts</code> 就是放Markdown文章的目录,</p>
+<pre><code>$mkdir _posts
+</code></pre>
+<p>文件名格式： <code>yyyy-mm-dd-postname.md</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2011-12-31-new-years-eve-is-awesome.md</span><br><span class="line">2012-09-12-how-to-write-a-blog.textile</span><br></pre></td></tr></table></figure>
+
+<h1 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h1><p>特点： 更丰富的主题，nodejs环境</p>
+<h3 id="安装nodejs"><a href="#安装nodejs" class="headerlink" title="安装nodejs"></a>安装nodejs</h3><p>安装nodejs，并检查版本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node -v  #(Should be at least nodejs 6.9)</span><br><span class="line">$ npm -v</span><br></pre></td></tr></table></figure>
+
+<p>安装hexo-cli：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<p>若在Mac上安装出现权限问题，使用以下步骤解决：</p>
+<p>(有些资料写使用sudo，但在我的Mac不适用，查阅官方文档找到解决办法如下)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir ~&#x2F;.npm-global</span><br><span class="line"></span><br><span class="line">$ npm config set prefix &#39;~&#x2F;.npm-global&#39;</span><br><span class="line"></span><br><span class="line"># 在~&#x2F;.bash_profile文件中添加</span><br><span class="line">$ export PATH&#x3D;~&#x2F;.npm-global&#x2F;bin:$PATH</span><br><span class="line"></span><br><span class="line"># 使之立即生效</span><br><span class="line">$ source ~&#x2F;.bash_profile</span><br><span class="line"></span><br><span class="line"># 测试是否成功</span><br><span class="line">$ npm install -g jshint</span><br><span class="line"></span><br><span class="line"># 若成功则安装hexo-cli</span><br><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用hexo创建blog"><a href="#使用hexo创建blog" class="headerlink" title="使用hexo创建blog"></a>使用hexo创建blog</h3><p>初始化一个blog：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init myblog</span><br><span class="line">$ cd myblog</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+
+<p>生成静态页面：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 很万能的命令，各种问题出现先clean试下比较好，尤其是换了主题后</span><br><span class="line">$ hexo clean</span><br><span class="line"></span><br><span class="line"># 生成静态页面</span><br><span class="line">$ hexo g</span><br></pre></td></tr></table></figure>
+
+<p>本地运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 若端口被占用，使用-p 4001替换默认4000端口</span><br><span class="line">$ hexo s</span><br><span class="line"></span><br><span class="line">命令行提示访问URL，在浏览器输入即可预览</span><br></pre></td></tr></table></figure>
+
+<h3 id="定制hexo"><a href="#定制hexo" class="headerlink" title="定制hexo"></a>定制hexo</h3><h4 id="推送GitHub"><a href="#推送GitHub" class="headerlink" title="推送GitHub"></a>推送GitHub</h4><p>安装插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>使用推送的方式来发布blog，不要自己commit，修改myblog目录下的 <code>_config.yml</code> 配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo:</span><br><span class="line">    github: https:&#x2F;&#x2F;github.com&#x2F;yourname&#x2F;yourname.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p><code>_config.yml</code> 中还有一些其他配置，可以自行定制。</p>
+<p>使用以下命令来推送：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h4><p>可以在官网选择主题：<a target="_blank" rel="noopener" href="https://hexo.io/themes/">https://hexo.io/themes/</a></p>
+<p>比如最热门的next主题替换方法是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https:&#x2F;&#x2F;github.com&#x2F;iissnan&#x2F;hexo-theme-next themes&#x2F;next</span><br></pre></td></tr></table></figure>
+
+<p>配置 <code>_config.yml</code> 的主题选项： <code>theme: next</code> 即可。</p>
+<p>在主题 <code>themes/next/_config.yml</code> 配置中也可以定制个性化选项。</p>
+<h1 id="Hugo"><a href="#Hugo" class="headerlink" title="Hugo"></a>Hugo</h1><p>特点： 轻巧纯净，不依赖环境</p>
+<p>使用简单，看<a target="_blank" rel="noopener" href="https://www.gohugo.org/">官方文档</a>即可搞定：建立blog，切换主题，推送gitpage的步骤。</p>
+<h1 id="markdown文件编辑"><a href="#markdown文件编辑" class="headerlink" title="markdown文件编辑"></a>markdown文件编辑</h1><p>blog最重要的当然是内容，推荐平时记笔记用md文件记录，不管你使用什么工具和主题，切换都很方便啦。</p>
+<p>解析 <code>.md</code> 规则：</p>
+<p><a target="_blank" rel="noopener" href="https://guides.github.com/features/mastering-markdown/">https://guides.github.com/features/mastering-markdown/</a></p>
+<p>在线编辑工具,</p>
+<p><a target="_blank" rel="noopener" href="http://dillinger.io/">http://dillinger.io/</a></p>
+<p>Mac上的编辑工具： <code>Macdown</code> <code>typora</code></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/index.html">https://hexo.io/zh-cn/docs/index.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally">https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.gohugo.org/">https://www.gohugo.org/</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2014/02/27/2014-02-28-research-of-gcov/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2014/02/27/2014-02-28-research-of-gcov/" class="post-title-link" itemprop="url">Research of gcov</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2014-02-28 00:00:00" itemprop="dateCreated datePublished" datetime="2014-02-28T00:00:00+08:00">2014-02-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/gcov/" itemprop="url" rel="index"><span itemprop="name">gcov</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="编译安装合适的gcc版本"><a href="#编译安装合适的gcc版本" class="headerlink" title="编译安装合适的gcc版本"></a>编译安装合适的gcc版本</h2><p>下载gcc包<br><code>gcc-version-xx.tar.bz2</code></p>
+<p>解压<br><code>tar -jxvf gcc-version-xx.tar.bz2</code></p>
+<p>进入目录<br><code>cd gcc-version-xx</code></p>
+<p>执行configure试一下看缺少了什么依赖<br><code>./configure</code></p>
+<p>(如本次缺少两个库，<code>mpfr</code> 和 <code>gmp</code>，可以用软件管理器安装，也可以自己添加库。</p>
+<p>下载这两个包，解压放在gcc-version-xx目录，并且把目录的版本号删掉，名字改为： mpfr 和 gmp )<br>再试一下是否生成了Makefile文件</p>
+<p><code>../gcc-version-xx/configure --prefix=yourdir/gcc-version-xx/</code></p>
+<h2 id="编译包含flush-gcov函数的库：静态库与共享库的区别"><a href="#编译包含flush-gcov函数的库：静态库与共享库的区别" class="headerlink" title="编译包含flush gcov函数的库：静态库与共享库的区别"></a>编译包含flush gcov函数的库：静态库与共享库的区别</h2><blockquote>
+<p>动态库（-fprofile-arcs -ftest-coverage可能是第二步不必要的选项）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -c -fPIC libats.c -fprofile-arcs -ftest-coverage</span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage -shared -o libats.so libats.o</span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage test.c -g -L. -lats -Iats -o test</span><br></pre></td></tr></table></figure>
+
+<p>运行期间刷出的gcda只是libats的</p>
+<blockquote>
+<p>静态库</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -c libats.c -fprofile-arcs -ftest-coverage</span><br><span class="line"></span><br><span class="line">ar -cr libats.a libats.o </span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage test.c -g -L. -lats -Iats -o test</span><br></pre></td></tr></table></figure>
+
+<p>运行期间刷出的gcda是libats和test全部的</p>
+<p>this program is not .so<br>flush gcov的范围是this program</p>
+<p>readelf -l objectfile<br>动态链接库是有自己的program header<br>被编译进来或者静态库没有program header</p>
+<blockquote>
+<p>结论</p>
+</blockquote>
+<p>包含libgcov.a并在运行期间调用flush_gcov函数，只能在静态库中操作，因为动态库有自己的program header。</p>
+<p>除此之外，一般的函数静态或动态编译并没本质区别。只是加载时期不同而已。</p>
+<h2 id="编译处理过程"><a href="#编译处理过程" class="headerlink" title="编译处理过程"></a>编译处理过程</h2><blockquote>
+<p>预处理 -E</p>
+</blockquote>
+<p>程序员代码-&gt;编译器识别的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -E test_merge_gcda.c -o test_merge_gcda.i</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>编译 -S</p>
+</blockquote>
+<p>代码-&gt;汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -S test_merge_gcda.i </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>合并以上两步</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S -ftest-coverage -fprofile-arcs test.i</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>汇编 -c</p>
+</blockquote>
+<p>代码-&gt;机器码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -c test_merge_gcda.s -o test_merge_gcda.o</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>链接</p>
+</blockquote>
+<p>机器码-&gt;可执行文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -o test_merge_gcda test_merge_gcda.o</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>合并以上两步</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test_merge_gcda test_merge_gcda.o -lgov</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# ls</span><br><span class="line">test_merge_gcda  test_merge_gcda.c  test_merge_gcda.i  test_merge_gcda.o  test_merge_gcda.s</span><br></pre></td></tr></table></figure>
+
+<h2 id="gcc-coverage理解"><a href="#gcc-coverage理解" class="headerlink" title="gcc coverage理解"></a>gcc coverage理解</h2><h4 id="生成gcno的原理？"><a href="#生成gcno的原理？" class="headerlink" title="生成gcno的原理？"></a>生成gcno的原理？</h4><p>在汇编代码插入gcov的一些计数器，链接生成可执行文件时，生成gcno文件。</p>
+<h4 id="在哪插入？"><a href="#在哪插入？" class="headerlink" title="在哪插入？"></a>在哪插入？</h4><p>每个BB后面会插入一个，具体说应该是连通各个的地方。(但是逻辑图和实际图不一致，因此stub并不等于arc)</p>
+<h4 id="何为BB？"><a href="#何为BB？" class="headerlink" title="何为BB？"></a>何为BB？</h4><p>basic block， 基本块。<br>每个基本块只有一个入口，一个出口，因此是原子的。<br>同一行代码可以同时属于多个BB。</p>
+<h4 id="生成gcda的原理？"><a href="#生成gcda的原理？" class="headerlink" title="生成gcda的原理？"></a>生成gcda的原理？</h4><p>执行时，被插入的代码会记录每个arc被运行的次数（counter），程序执行结束，最后一个被插入代码会把counter信息写入gcda文件。</p>
+<h4 id="生成gcov的原理？"><a href="#生成gcov的原理？" class="headerlink" title="生成gcov的原理？"></a>生成gcov的原理？</h4><p>根据BB和分支记录的原始信息，和运行时的counter信息（或加之源文件），算出每行被执行的次数。</p>
+<h4 id="gcov记录的信息？"><a href="#gcov记录的信息？" class="headerlink" title="gcov记录的信息？"></a>gcov记录的信息？</h4><p>BB和分支。</p>
+<h4 id="gcda记录的信息？"><a href="#gcda记录的信息？" class="headerlink" title="gcda记录的信息？"></a>gcda记录的信息？</h4><p>执行时每个arc被运行的次数，推算出每个BB执行的次数，从而算出每个函数执行次数。</p>
+<p>如何分析代码产生BB，即确定插桩stub位置？<br>此问题即对应bb图和源码行，从二维到一维的关系。</p>
+<h4 id="gcno中block，arcs，line？"><a href="#gcno中block，arcs，line？" class="headerlink" title="gcno中block，arcs，line？"></a>gcno中block，arcs，line？</h4><p>实际BB，虚拟BB。<br>虚拟BB包括start和end，中间也可能存在虚拟BB。</p>
+<p>LINE数目为真实BB的个数，记录的是每个BB在哪个文件所对应的行数。（因为有可能编译的时候包括进来其他文件）<br>ARCS数目为所有BB个数-1，即每个有出度的BB，所指向的BB号码。</p>
+<p>每个ARCS长度为（1+出度*2），表示的是，自身BB标号+指向BB标号和?<br>（源码里是dest和flag）</p>
+<h4 id="如果根据gcda记录的-arc-counter信息确定每个bb执行次数？"><a href="#如果根据gcda记录的-arc-counter信息确定每个bb执行次数？" class="headerlink" title="如果根据gcda记录的 arc counter信息确定每个bb执行次数？"></a>如果根据gcda记录的 arc counter信息确定每个bb执行次数？</h4><p>arc counter的个数为插桩点的个数，从源码线性确定每个分段被执行过的路径。</p>
+<h4 id="何为branch？"><a href="#何为branch？" class="headerlink" title="何为branch？"></a>何为branch？</h4><p>传统理解的分支，一个逻辑块。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yamcheung/yamcov">我的代码实现</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Yam</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Yam</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

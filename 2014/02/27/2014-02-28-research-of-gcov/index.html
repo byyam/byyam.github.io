@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Research of gcov | Yam&#39;s Notebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="编译安装合适的gcc版本下载gcc包gcc-version-xx.tar.bz2 解压tar -jxvf gcc-version-xx.tar.bz2 进入目录cd gcc-version-xx 执行configure试一下看缺少了什么依赖.&#x2F;configure (如本次缺少两个库，mpfr 和 gmp，可以用软件管理器安装，也可以自己添加库。 下载这两个包，解压放在gcc-version-xx目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Research of gcov">
+<meta property="og:url" content="https://byyam.github.io/2014/02/27/2014-02-28-research-of-gcov/index.html">
+<meta property="og:site_name" content="Yam&#39;s Notebook">
+<meta property="og:description" content="编译安装合适的gcc版本下载gcc包gcc-version-xx.tar.bz2 解压tar -jxvf gcc-version-xx.tar.bz2 进入目录cd gcc-version-xx 执行configure试一下看缺少了什么依赖.&#x2F;configure (如本次缺少两个库，mpfr 和 gmp，可以用软件管理器安装，也可以自己添加库。 下载这两个包，解压放在gcc-version-xx目">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2014-02-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-04-24T09:40:50.092Z">
+<meta property="article:author" content="Yam">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Yam's Notebook" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Yam&#39;s Notebook</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://byyam.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-2014-02-28-research-of-gcov" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2014/02/27/2014-02-28-research-of-gcov/" class="article-date">
+  <time class="dt-published" datetime="2014-02-27T16:00:00.000Z" itemprop="datePublished">2014-02-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/gcov/">gcov</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Research of gcov
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="编译安装合适的gcc版本"><a href="#编译安装合适的gcc版本" class="headerlink" title="编译安装合适的gcc版本"></a>编译安装合适的gcc版本</h2><p>下载gcc包<br><code>gcc-version-xx.tar.bz2</code></p>
+<p>解压<br><code>tar -jxvf gcc-version-xx.tar.bz2</code></p>
+<p>进入目录<br><code>cd gcc-version-xx</code></p>
+<p>执行configure试一下看缺少了什么依赖<br><code>./configure</code></p>
+<p>(如本次缺少两个库，<code>mpfr</code> 和 <code>gmp</code>，可以用软件管理器安装，也可以自己添加库。</p>
+<p>下载这两个包，解压放在gcc-version-xx目录，并且把目录的版本号删掉，名字改为： mpfr 和 gmp )<br>再试一下是否生成了Makefile文件</p>
+<p><code>../gcc-version-xx/configure --prefix=yourdir/gcc-version-xx/</code></p>
+<h2 id="编译包含flush-gcov函数的库：静态库与共享库的区别"><a href="#编译包含flush-gcov函数的库：静态库与共享库的区别" class="headerlink" title="编译包含flush gcov函数的库：静态库与共享库的区别"></a>编译包含flush gcov函数的库：静态库与共享库的区别</h2><blockquote>
+<p>动态库（-fprofile-arcs -ftest-coverage可能是第二步不必要的选项）</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -c -fPIC libats.c -fprofile-arcs -ftest-coverage</span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage -shared -o libats.so libats.o</span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage test.c -g -L. -lats -Iats -o test</span><br></pre></td></tr></table></figure>
+
+<p>运行期间刷出的gcda只是libats的</p>
+<blockquote>
+<p>静态库</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -c libats.c -fprofile-arcs -ftest-coverage</span><br><span class="line"></span><br><span class="line">ar -cr libats.a libats.o </span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage test.c -g -L. -lats -Iats -o test</span><br></pre></td></tr></table></figure>
+
+<p>运行期间刷出的gcda是libats和test全部的</p>
+<p>this program is not .so<br>flush gcov的范围是this program</p>
+<p>readelf -l objectfile<br>动态链接库是有自己的program header<br>被编译进来或者静态库没有program header</p>
+<blockquote>
+<p>结论</p>
+</blockquote>
+<p>包含libgcov.a并在运行期间调用flush_gcov函数，只能在静态库中操作，因为动态库有自己的program header。</p>
+<p>除此之外，一般的函数静态或动态编译并没本质区别。只是加载时期不同而已。</p>
+<h2 id="编译处理过程"><a href="#编译处理过程" class="headerlink" title="编译处理过程"></a>编译处理过程</h2><blockquote>
+<p>预处理 -E</p>
+</blockquote>
+<p>程序员代码-&gt;编译器识别的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -E test_merge_gcda.c -o test_merge_gcda.i</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>编译 -S</p>
+</blockquote>
+<p>代码-&gt;汇编代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -S test_merge_gcda.i </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>合并以上两步</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S -ftest-coverage -fprofile-arcs test.i</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>汇编 -c</p>
+</blockquote>
+<p>代码-&gt;机器码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -c test_merge_gcda.s -o test_merge_gcda.o</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>链接</p>
+</blockquote>
+<p>机器码-&gt;可执行文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -o test_merge_gcda test_merge_gcda.o</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>合并以上两步</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test_merge_gcda test_merge_gcda.o -lgov</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# ls</span><br><span class="line">test_merge_gcda  test_merge_gcda.c  test_merge_gcda.i  test_merge_gcda.o  test_merge_gcda.s</span><br></pre></td></tr></table></figure>
+
+<h2 id="gcc-coverage理解"><a href="#gcc-coverage理解" class="headerlink" title="gcc coverage理解"></a>gcc coverage理解</h2><h4 id="生成gcno的原理？"><a href="#生成gcno的原理？" class="headerlink" title="生成gcno的原理？"></a>生成gcno的原理？</h4><p>在汇编代码插入gcov的一些计数器，链接生成可执行文件时，生成gcno文件。</p>
+<h4 id="在哪插入？"><a href="#在哪插入？" class="headerlink" title="在哪插入？"></a>在哪插入？</h4><p>每个BB后面会插入一个，具体说应该是连通各个的地方。(但是逻辑图和实际图不一致，因此stub并不等于arc)</p>
+<h4 id="何为BB？"><a href="#何为BB？" class="headerlink" title="何为BB？"></a>何为BB？</h4><p>basic block， 基本块。<br>每个基本块只有一个入口，一个出口，因此是原子的。<br>同一行代码可以同时属于多个BB。</p>
+<h4 id="生成gcda的原理？"><a href="#生成gcda的原理？" class="headerlink" title="生成gcda的原理？"></a>生成gcda的原理？</h4><p>执行时，被插入的代码会记录每个arc被运行的次数（counter），程序执行结束，最后一个被插入代码会把counter信息写入gcda文件。</p>
+<h4 id="生成gcov的原理？"><a href="#生成gcov的原理？" class="headerlink" title="生成gcov的原理？"></a>生成gcov的原理？</h4><p>根据BB和分支记录的原始信息，和运行时的counter信息（或加之源文件），算出每行被执行的次数。</p>
+<h4 id="gcov记录的信息？"><a href="#gcov记录的信息？" class="headerlink" title="gcov记录的信息？"></a>gcov记录的信息？</h4><p>BB和分支。</p>
+<h4 id="gcda记录的信息？"><a href="#gcda记录的信息？" class="headerlink" title="gcda记录的信息？"></a>gcda记录的信息？</h4><p>执行时每个arc被运行的次数，推算出每个BB执行的次数，从而算出每个函数执行次数。</p>
+<p>如何分析代码产生BB，即确定插桩stub位置？<br>此问题即对应bb图和源码行，从二维到一维的关系。</p>
+<h4 id="gcno中block，arcs，line？"><a href="#gcno中block，arcs，line？" class="headerlink" title="gcno中block，arcs，line？"></a>gcno中block，arcs，line？</h4><p>实际BB，虚拟BB。<br>虚拟BB包括start和end，中间也可能存在虚拟BB。</p>
+<p>LINE数目为真实BB的个数，记录的是每个BB在哪个文件所对应的行数。（因为有可能编译的时候包括进来其他文件）<br>ARCS数目为所有BB个数-1，即每个有出度的BB，所指向的BB号码。</p>
+<p>每个ARCS长度为（1+出度*2），表示的是，自身BB标号+指向BB标号和?<br>（源码里是dest和flag）</p>
+<h4 id="如果根据gcda记录的-arc-counter信息确定每个bb执行次数？"><a href="#如果根据gcda记录的-arc-counter信息确定每个bb执行次数？" class="headerlink" title="如果根据gcda记录的 arc counter信息确定每个bb执行次数？"></a>如果根据gcda记录的 arc counter信息确定每个bb执行次数？</h4><p>arc counter的个数为插桩点的个数，从源码线性确定每个分段被执行过的路径。</p>
+<h4 id="何为branch？"><a href="#何为branch？" class="headerlink" title="何为branch？"></a>何为branch？</h4><p>传统理解的分支，一个逻辑块。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/yamcheung/yamcov">我的代码实现</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://byyam.github.io/2014/02/27/2014-02-28-research-of-gcov/" data-id="cknvjyszo000035wy56noahus" data-title="Research of gcov" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/19/2015-09-19-how-to-post-on-gitpages/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">前一篇</strong>
+      <div class="article-nav-title">
+        
+          使用GitPage管理博客
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/algorithms/">algorithms</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/database/">database</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/gcov/">gcov</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/how2use/">how2use</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/protocol/">protocol</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">四月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/04/24/2020-10-04-rtc/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/24/2021-04-10-mediasoup/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/26/2020-05-27-golang/">Golang</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/26/2020-05-27-mysql/">MySQL</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/25/2020-05-26-quic/">QUIC</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 Yam<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

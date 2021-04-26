@@ -187,6 +187,10 @@ WebSocket定义了3种类型的控制消息（control message）：close, ping a
 
 客户端收到响应后，执行TCP四次挥手过长，双方关闭TCP连接。
 
+在实际捕获websocket的close code时，应注意以下细节：
+* `1006`属于错误码，并不是可从`SetCloseHandler`中捕获到的，因为它没有真正的发送close消息。
+* 若websocket由Nginx代理，应考虑Nginx可能会主动发送close的情况，因此应该从读取message的地方去获取断开原因，因为`SetCloseHandler`有可能会接收到Nginx发来的close状态。
+
 **ping**
 
 `opcode`为0x9
@@ -212,3 +216,4 @@ WebSocket定义了3种类型的控制消息（control message）：close, ping a
 
 [https://godoc.org/github.com/gorilla/websocket](https://godoc.org/github.com/gorilla/websocket)
 
+[https://github.com/gorilla/websocket](https://github.com/gorilla/websocket)

@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"byyam.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"byyam.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta name="description" content="全双工协议简而言之，许多应用场景需要全双工的web应用，例如：服务器主动推送和实时交互的应用。这些应用不适合在HTTP协议上实现。最好的方式是使用HTTP建立握手，之后基于TCP做长连接。 与HTTP的关系是：使用了其握手机制和端口号。  Relationship to TCP and HTTP      The WebSocket Protocol is an independent TCP-b">
@@ -28,7 +28,7 @@
 <meta property="og:description" content="全双工协议简而言之，许多应用场景需要全双工的web应用，例如：服务器主动推送和实时交互的应用。这些应用不适合在HTTP协议上实现。最好的方式是使用HTTP建立握手，之后基于TCP做长连接。 与HTTP的关系是：使用了其握手机制和端口号。  Relationship to TCP and HTTP      The WebSocket Protocol is an independent TCP-b">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-06T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-04-24T12:06:13.435Z">
+<meta property="article:modified_time" content="2021-04-26T05:54:37.876Z">
 <meta property="article:author" content="Yam">
 <meta name="twitter:card" content="summary">
 
@@ -103,6 +103,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -122,11 +123,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -180,7 +208,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-24 20:06:13" itemprop="dateModified" datetime="2021-04-24T20:06:13+08:00">2021-04-24</time>
+                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -250,6 +278,11 @@
 <p>客户端发起的close，<code>websocket.payload.close.status_code</code>置为1000，表示normal closure。若不设置，则默认为CloseNoStatusReceived=1005。</p>
 <p>服务器收到关闭请求，响应包也发送1000。</p>
 <p>客户端收到响应后，执行TCP四次挥手过长，双方关闭TCP连接。</p>
+<p>在实际捕获websocket的close code时，应注意以下细节：</p>
+<ul>
+<li><code>1006</code>属于错误码，并不是可从<code>SetCloseHandler</code>中捕获到的，因为它没有真正的发送close消息。</li>
+<li>若websocket由Nginx代理，应考虑Nginx可能会主动发送close的情况，因此应该从读取message的地方去获取断开原因，因为<code>SetCloseHandler</code>有可能会接收到Nginx发来的close状态。</li>
+</ul>
 <p><strong>ping</strong></p>
 <p><code>opcode</code>为0x9</p>
 <p>发送方 -&gt; 接收方</p>
@@ -265,6 +298,7 @@
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6455">https://tools.ietf.org/html/rfc6455</a></p>
 <p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/WebSocket">https://zh.wikipedia.org/wiki/WebSocket</a></p>
 <p><a target="_blank" rel="noopener" href="https://godoc.org/github.com/gorilla/websocket">https://godoc.org/github.com/gorilla/websocket</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">https://github.com/gorilla/websocket</a></p>
 
     </div>
 
@@ -369,6 +403,11 @@
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/byyam" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;byyam" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
 
 
 
@@ -397,7 +436,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Yam</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
   </div>
 
         
@@ -423,7 +462,7 @@
 <script src="/js/motion.js"></script>
 
 
-<script src="/js/schemes/pisces.js"></script>
+<script src="/js/schemes/muse.js"></script>
 
 
 <script src="/js/next-boot.js"></script>
@@ -434,6 +473,10 @@
   
 
 
+
+
+  
+<script src="/js/local-search.js"></script>
 
 
 

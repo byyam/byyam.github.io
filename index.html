@@ -173,6 +173,107 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2021/05/08/2021-05-09-http-long-polling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Yam">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yam's Notebook">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/08/2021-05-09-http-long-polling/" class="post-title-link" itemprop="url">HttpLongPolling</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-09 00:00:00 / 修改时间：13:55:54" itemprop="dateCreated datePublished" datetime="2021-05-09T00:00:00+08:00">2021-05-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/protocol/" itemprop="url" rel="index"><span itemprop="name">protocol</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="HTTP推送技术-Push-technology"><a href="#HTTP推送技术-Push-technology" class="headerlink" title="HTTP推送技术 Push technology"></a>HTTP推送技术 Push technology</h3><p>传统的HTTP请求都是client主动发起到server的请求，若server有通知需要即时通知client时，需要推送技术。</p>
+<h4 id="常规轮询-Regular-Polling"><a href="#常规轮询-Regular-Polling" class="headerlink" title="常规轮询 Regular Polling"></a>常规轮询 Regular Polling</h4><p>每隔一段时间pull/get消息。</p>
+<ul>
+<li>没有消息时浪费资源。</li>
+<li>有消息时不能即时推送。</li>
+</ul>
+<h4 id="长轮询-Long-Polling"><a href="#长轮询-Long-Polling" class="headerlink" title="长轮询 Long Polling"></a>长轮询 Long Polling</h4><ol>
+<li><p>请求</p>
+<p>client发起请求并把keepalive时间设的较长，服务器收到消息并不立即返回，而是hold一段时间。</p>
+</li>
+<li><p>响应</p>
+<p>当有消息推送时，server立即返回消息。或server的connection hang timeout时，返回消息。server返回消息后，将连接关闭。</p>
+</li>
+<li><p>循环</p>
+<p> client收到response后，应立即再次发起请求。</p>
+</li>
+</ol>
+<h3 id="Long-Polling-vs-Websocket"><a href="#Long-Polling-vs-Websocket" class="headerlink" title="Long Polling vs Websocket"></a>Long Polling vs Websocket</h3><p>Long Polling并不是一种全新的协议，而是基于XMLHttpRequest实现了一种推送机制。最大的优点是过渡期的兼容性好，client无需新增协议，容易适配。<br>同个client若发起多个request连接，消息只返回一次，应通过本地缓存共享推送消息。</p>
+<p>websocket协议相对较晚出现，需要client和server端都支持websocket协议，尽管它的握手还是基于HTTP协议，但它在HTTP协议上实现了全双工通信。</p>
+<p>websocket几乎解决了Long Polling的所有缺点，只是被断开后不能自恢复。</p>
+<h3 id="Apollo在Long-polling的实践"><a href="#Apollo在Long-polling的实践" class="headerlink" title="Apollo在Long polling的实践"></a>Apollo在Long polling的实践</h3><p>Apollo是携程开源的配置中心，提供了带缓存和不带缓存的pull接口，和long polling即时变更推送接口。</p>
+<p>为了避免long polling机制的缺陷，使用了版本号等方案。</p>
+<ul>
+<li><p>Long polling获取的消息时，需要带上本地缓存的notificationId，server端判断client带过来的notificationId是否为最新，若需要更新则立即返回消息，否则等配置有更新才会返回，返回消息携带notificationId，client端更新缓存。这样做的好处是，即使中间断开连接，恢复连接后也可以对比本地是否需要更新配置信息。</p>
+</li>
+<li><p>client使用pull接口获取配置时，可填参数IP表示client的唯一Id，当需要灰度推送时，根据client携带的IP判断是否给它灰度配置。这样做的好处是，使用逻辑上的Id（IP），相同IP的client可以获取到相同的配置。</p>
+</li>
+<li><p>client使用pull接口获取配置时，可填参数releaseKey。Apollo每次发布配置时，会为新版本的配置生成releaseKey，使用常规轮询时server端无需每次都查表，可根据releaseKey判断是否需要读取配置。client也无需每次都更新本地缓存的配置。</p>
+</li>
+</ul>
+<img src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U2NyaXB0VHlwZT0iYXBwbGljYXRpb24vZWNtYXNjcmlwdCIgY29udGVudFN0eWxlVHlwZT0idGV4dC9jc3MiIGhlaWdodD0iNTc0cHgiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHN0eWxlPSJ3aWR0aDo2ODZweDtoZWlnaHQ6NTc0cHg7YmFja2dyb3VuZDojRkZGRkZGOyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgNjg2IDU3NCIgd2lkdGg9IjY4NnB4IiB6b29tQW5kUGFuPSJtYWduaWZ5Ij48ZGVmcz48ZmlsdGVyIGhlaWdodD0iMzAwJSIgaWQ9ImZtdnJrYmt0Mjkyb2YiIHdpZHRoPSIzMDAlIiB4PSItMSIgeT0iLTEiPjxmZUdhdXNzaWFuQmx1ciByZXN1bHQ9ImJsdXJPdXQiIHN0ZERldmlhdGlvbj0iMi4wIi8+PGZlQ29sb3JNYXRyaXggaW49ImJsdXJPdXQiIHJlc3VsdD0iYmx1ck91dDIiIHR5cGU9Im1hdHJpeCIgdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAuNCAwIi8+PGZlT2Zmc2V0IGR4PSI0LjAiIGR5PSI0LjAiIGluPSJibHVyT3V0MiIgcmVzdWx0PSJibHVyT3V0MyIvPjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImJsdXJPdXQzIiBtb2RlPSJub3JtYWwiLz48L2ZpbHRlcj48L2RlZnM+PGc+PGVsbGlwc2UgY3g9IjQwOS44NzUiIGN5PSIyMCIgZmlsbD0iIzAwMDAwMCIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiByeD0iMTAiIHJ5PSIxMCIgc3R5bGU9InN0cm9rZTpub25lO3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBwb2ludHM9IjMyMC4zNzUsMTAzLjk2ODgsNDk5LjM3NSwxMDMuOTY4OCw1MTEuMzc1LDExNS45Njg4LDQ5OS4zNzUsMTI3Ljk2ODgsMzIwLjM3NSwxMjcuOTY4OCwzMDguMzc1LDExNS45Njg4LDMyMC4zNzUsMTAzLjk2ODgiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjE3OSIgeD0iMzIwLjM3NSIgeT0iMTE5Ljc3NjkiPkFwb2xsbyBjb25maWcgbm9ybWFsIHJlc3BvbnNlPzwvdGV4dD48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIyMSIgeD0iMjg3LjM3NSIgeT0iMTEzLjM3NDUiPnllczwvdGV4dD48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNCIgeD0iNTExLjM3NSIgeT0iMTEzLjM3NDUiPm5vPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGRUZFQ0UiIGZpbHRlcj0idXJsKCNmbXZya2JrdDI5Mm9mKSIgcG9pbnRzPSIyMDcuMjUsMTM3Ljk2ODgsMzA1LjI1LDEzNy45Njg4LDMxNy4yNSwxNDkuOTY4OCwzMDUuMjUsMTYxLjk2ODgsMjA3LjI1LDE2MS45Njg4LDE5NS4yNSwxNDkuOTY4OCwyMDcuMjUsMTM3Ljk2ODgiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9Ijk4IiB4PSIyMDcuMjUiIHk9IjE1My43NzY5Ij5odHRwIHN0YXR1cyBjb2RlPzwvdGV4dD48cmVjdCBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZm12cmtia3QyOTJvZikiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHdpZHRoPSIxNDYiIHg9IjEwNC41IiB5PSIxODQuNzczNCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEyMiIgeD0iMTE4LjUiIHk9IjIwNS45MTIxIj51cGRhdGUgbm90aWZpY2F0aW9uSWQ8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBwb2ludHM9IjEwNywyMzguNzQyMiwyNDgsMjM4Ljc0MjIsMjYwLDI1MC43NDIyLDI0OCwyNjIuNzQyMiwxMDcsMjYyLjc0MjIsOTUsMjUwLjc0MjIsMTA3LDIzOC43NDIyIiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNDEiIHg9IjEwNyIgeT0iMjU0LjU1MDMiPkhUVFAgZ2V0IGNvbmZpZyBuZXdlc3Q/PC90ZXh0PjxyZWN0IGZpbGw9IiNGRUZFQ0UiIGZpbHRlcj0idXJsKCNmbXZya2JrdDI5Mm9mKSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgd2lkdGg9IjEzOCIgeD0iMTEiIHk9IjI4NS41NDY5Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTE0IiB4PSIyNSIgeT0iMzA2LjY4NTUiPnVwZGF0ZSBsb2NhbCBjYWNoZTwvdGV4dD48cmVjdCBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZm12cmtia3QyOTJvZikiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHdpZHRoPSI4NyIgeD0iMjMxLjUiIHk9IjI4NS41NDY5Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNjMiIHg9IjI0NS41IiB5PSIzMDYuNjg1NSI+bm8gY2hhbmdlPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGRUZFQ0UiIGZpbHRlcj0idXJsKCNmbXZya2JrdDI5Mm9mKSIgcG9pbnRzPSIxNzcuNSwzODMuNDg0NCwxNzcuNSwzODMuNDg0NCwxODkuNSwzOTUuNDg0NCwxNzcuNSw0MDcuNDg0NCwxNzcuNSw0MDcuNDg0NCwxNjUuNSwzOTUuNDg0NCwxNzcuNSwzODMuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7Ii8+PHJlY3QgZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB3aWR0aD0iODciIHg9IjMzOC41IiB5PSIxODQuNzczNCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjYzIiB4PSIzNTIuNSIgeT0iMjA1LjkxMjEiPm5vIGNoYW5nZTwvdGV4dD48cmVjdCBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZm12cmtia3QyOTJvZikiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHdpZHRoPSI1NiIgeD0iNDQ1LjUiIHk9IjE4NC43NzM0Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMzIiIHg9IjQ1OS41IiB5PSIyMDUuOTEyMSI+b3RoZXI8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBwb2ludHM9IjI1Ni4yNSw0MTcuNDg0NCwyNTYuMjUsNDE3LjQ4NDQsMjY4LjI1LDQyOS40ODQ0LDI1Ni4yNSw0NDEuNDg0NCwyNTYuMjUsNDQxLjQ4NDQsMjQ0LjI1LDQyOS40ODQ0LDI1Ni4yNSw0MTcuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7Ii8+PHJlY3QgZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB3aWR0aD0iODQiIHg9IjUyMS41IiB5PSIxMzcuOTY4OCIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjYwIiB4PSI1MzUuNSIgeT0iMTU5LjEwNzQiPkh0dHAgZXJyb3I8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBwb2ludHM9IjQwOS44NzUsNDQ3LjQ4NDQsNDIxLjg3NSw0NTkuNDg0NCw0MDkuODc1LDQ3MS40ODQ0LDM5Ny44NzUsNDU5LjQ4NDQsNDA5Ljg3NSw0NDcuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7Ii8+PHJlY3QgZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB3aWR0aD0iODciIHg9IjM2Ni4zNzUiIHk9IjUwIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNjciIHg9IjM3Ni4zNzUiIHk9IjcxLjEzODciPkxvbmdQb2xsaW5nPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGRUZFQ0UiIGZpbHRlcj0idXJsKCNmbXZya2JrdDI5Mm9mKSIgcG9pbnRzPSI0MDkuODc1LDQ5MS40ODQ0LDQwOS44NzUsNDkxLjQ4NDQsNDIxLjg3NSw1MDMuNDg0NCw0MDkuODc1LDUxNS40ODQ0LDQwOS44NzUsNTE1LjQ4NDQsMzk3Ljg3NSw1MDMuNDg0NCw0MDkuODc1LDQ5MS40ODQ0IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiLz48cmVjdCBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZm12cmtia3QyOTJvZikiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHdpZHRoPSI1NCIgeD0iNjE1LjUiIHk9IjMyOS41MTU2Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMzQiIHg9IjYyNS41IiB5PSIzNTAuNjU0MyI+c2xlZXA8L3RleHQ+PGVsbGlwc2UgY3g9IjQwOS44NzUiIGN5PSI1NDYuNDg0NCIgZmlsbD0iI0ZGRkZGRiIgZmlsdGVyPSJ1cmwoI2ZtdnJrYmt0Mjkyb2YpIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMDAwMDAwO3N0cm9rZS13aWR0aDoxLjA7Ii8+PGVsbGlwc2UgY3g9IjQwOS44NzUiIGN5PSI1NDYuNDg0NCIgZmlsbD0iIzAwMDAwMCIgcng9IjYiIHJ5PSI2IiBzdHlsZT0ic3Ryb2tlOiM3RjdGN0Y7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI5NSIgeDI9IjgwIiB5MT0iMjUwLjc0MjIiIHkyPSIyNTAuNzQyMiIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjgwIiB4Mj0iODAiIHkxPSIyNTAuNzQyMiIgeTI9IjI4NS41NDY5Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSI3NiwyNzUuNTQ2OSw4MCwyODUuNTQ2OSw4NCwyNzUuNTQ2OSw4MCwyNzkuNTQ2OSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEiIHg9IjgwIiB5PSIyNzEuOTUyNiI+MjAwPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjI2MCIgeDI9IjI3NSIgeTE9IjI1MC43NDIyIiB5Mj0iMjUwLjc0MjIiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSIyNzUiIHgyPSIyNzUiIHkxPSIyNTAuNzQyMiIgeTI9IjI4NS41NDY5Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSIyNzEsMjc1LjU0NjksMjc1LDI4NS41NDY5LDI3OSwyNzUuNTQ2OSwyNzUsMjc5LjU0NjkiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjIxIiB4PSIyNzUiIHk9IjI3MS45NTI2Ij4zMDQ8L3RleHQ+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iODAiIHgyPSI4MCIgeTE9IjMxOS41MTU2IiB5Mj0iMzk1LjQ4NDQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI4MCIgeDI9IjE2NS41IiB5MT0iMzk1LjQ4NDQiIHkyPSIzOTUuNDg0NCIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iMTU1LjUsMzkxLjQ4NDQsMTY1LjUsMzk1LjQ4NDQsMTU1LjUsMzk5LjQ4NDQsMTU5LjUsMzk1LjQ4NDQiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjI3NSIgeDI9IjI3NSIgeTE9IjMxOS41MTU2IiB5Mj0iMzk1LjQ4NDQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSIyNzUiIHgyPSIxODkuNSIgeTE9IjM5NS40ODQ0IiB5Mj0iMzk1LjQ4NDQiLz48cG9seWdvbiBmaWxsPSIjQTgwMDM2IiBwb2ludHM9IjE5OS41LDM5MS40ODQ0LDE4OS41LDM5NS40ODQ0LDE5OS41LDM5OS40ODQ0LDE5NS41LDM5NS40ODQ0IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSIxNzcuNSIgeDI9IjE3Ny41IiB5MT0iMjE4Ljc0MjIiIHkyPSIyMzguNzQyMiIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iMTczLjUsMjI4Ljc0MjIsMTc3LjUsMjM4Ljc0MjIsMTgxLjUsMjI4Ljc0MjIsMTc3LjUsMjMyLjc0MjIiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjE5NS4yNSIgeDI9IjE3Ny41IiB5MT0iMTQ5Ljk2ODgiIHkyPSIxNDkuOTY4OCIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjE3Ny41IiB4Mj0iMTc3LjUiIHkxPSIxNDkuOTY4OCIgeTI9IjE4NC43NzM0Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSIxNzMuNSwxNzQuNzczNCwxNzcuNSwxODQuNzczNCwxODEuNSwxNzQuNzczNCwxNzcuNSwxNzguNzczNCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEiIHg9IjE3Ny41IiB5PSIxNzEuMTc5MiI+MjAwPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjMxNy4yNSIgeDI9IjQ3My41IiB5MT0iMTQ5Ljk2ODgiIHkyPSIxNDkuOTY4OCIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjQ3My41IiB4Mj0iNDczLjUiIHkxPSIxNDkuOTY4OCIgeTI9IjE4NC43NzM0Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSI0NjkuNSwxNzQuNzczNCw0NzMuNSwxODQuNzczNCw0NzcuNSwxNzQuNzczNCw0NzMuNSwxNzguNzczNCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMzAiIHg9IjQ3My41IiB5PSIxNzEuMTc5MiI+b3RoZXI8L3RleHQ+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iMTc3LjUiIHgyPSIxNzcuNSIgeTE9IjQwNy40ODQ0IiB5Mj0iNDI5LjQ4NDQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSIxNzcuNSIgeDI9IjI0NC4yNSIgeTE9IjQyOS40ODQ0IiB5Mj0iNDI5LjQ4NDQiLz48cG9seWdvbiBmaWxsPSIjQTgwMDM2IiBwb2ludHM9IjIzNC4yNSw0MjUuNDg0NCwyNDQuMjUsNDI5LjQ4NDQsMjM0LjI1LDQzMy40ODQ0LDIzOC4yNSw0MjkuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iNDczLjUiIHgyPSI0NzMuNSIgeTE9IjIxOC43NDIyIiB5Mj0iNDI5LjQ4NDQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI0NzMuNSIgeDI9IjI2OC4yNSIgeTE9IjQyOS40ODQ0IiB5Mj0iNDI5LjQ4NDQiLz48cG9seWdvbiBmaWxsPSIjQTgwMDM2IiBwb2ludHM9IjI3OC4yNSw0MjUuNDg0NCwyNjguMjUsNDI5LjQ4NDQsMjc4LjI1LDQzMy40ODQ0LDI3NC4yNSw0MjkuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iMzgyIiB4Mj0iMzgyIiB5MT0iMTQ5Ljk2ODgiIHkyPSIxODQuNzczNCIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iMzc4LDE3NC43NzM0LDM4MiwxODQuNzczNCwzODYsMTc0Ljc3MzQsMzgyLDE3OC43NzM0IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIyMSIgeD0iMzgyIiB5PSIxNzEuMTc5MiI+MzA0PC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjM4MiIgeDI9IjM4MiIgeTE9IjIxOC43NDIyIiB5Mj0iNDI5LjQ4NDQiLz48cG9seWdvbiBmaWxsPSIjQTgwMDM2IiBwb2ludHM9IjM3OCw0MTkuNDg0NCwzODIsNDI5LjQ4NDQsMzg2LDQxOS40ODQ0LDM4Miw0MjMuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iMzA4LjM3NSIgeDI9IjI1Ni4yNSIgeTE9IjExNS45Njg4IiB5Mj0iMTE1Ljk2ODgiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSIyNTYuMjUiIHgyPSIyNTYuMjUiIHkxPSIxMTUuOTY4OCIgeTI9IjEzNy45Njg4Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSIyNTIuMjUsMTI3Ljk2ODgsMjU2LjI1LDEzNy45Njg4LDI2MC4yNSwxMjcuOTY4OCwyNTYuMjUsMTMxLjk2ODgiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjUxMS4zNzUiIHgyPSI1NjMuNSIgeTE9IjExNS45Njg4IiB5Mj0iMTE1Ljk2ODgiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI1NjMuNSIgeDI9IjU2My41IiB5MT0iMTE1Ljk2ODgiIHkyPSIxMzcuOTY4OCIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iNTU5LjUsMTI3Ljk2ODgsNTYzLjUsMTM3Ljk2ODgsNTY3LjUsMTI3Ljk2ODgsNTYzLjUsMTMxLjk2ODgiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjI1Ni4yNSIgeDI9IjI1Ni4yNSIgeTE9IjQ0MS40ODQ0IiB5Mj0iNDU5LjQ4NDQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSIyNTYuMjUiIHgyPSIzOTcuODc1IiB5MT0iNDU5LjQ4NDQiIHkyPSI0NTkuNDg0NCIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iMzg3Ljg3NSw0NTUuNDg0NCwzOTcuODc1LDQ1OS40ODQ0LDM4Ny44NzUsNDYzLjQ4NDQsMzkxLjg3NSw0NTkuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iNTYzLjUiIHgyPSI1NjMuNSIgeTE9IjE3MS45Mzc1IiB5Mj0iNDU5LjQ4NDQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI1NjMuNSIgeDI9IjQyMS44NzUiIHkxPSI0NTkuNDg0NCIgeTI9IjQ1OS40ODQ0Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSI0MzEuODc1LDQ1NS40ODQ0LDQyMS44NzUsNDU5LjQ4NDQsNDMxLjg3NSw0NjMuNDg0NCw0MjcuODc1LDQ1OS40ODQ0IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI0MDkuODc1IiB4Mj0iNDA5Ljg3NSIgeTE9IjgzLjk2ODgiIHkyPSIxMDMuOTY4OCIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iNDA1Ljg3NSw5My45Njg4LDQwOS44NzUsMTAzLjk2ODgsNDEzLjg3NSw5My45Njg4LDQwOS44NzUsOTcuOTY4OCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iNDIxLjg3NSIgeDI9IjY0Mi41IiB5MT0iNTAzLjQ4NDQiIHkyPSI1MDMuNDg0NCIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjY0Mi41IiB4Mj0iNjQyLjUiIHkxPSIzNjMuNDg0NCIgeTI9IjUwMy40ODQ0Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSI2MzguNSwzNzMuNDg0NCw2NDIuNSwzNjMuNDg0NCw2NDYuNSwzNzMuNDg0NCw2NDIuNSwzNjkuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iNjQyLjUiIHgyPSI2NDIuNSIgeTE9IjY2Ljk4NDQiIHkyPSIzMjkuNTE1NiIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjY0Mi41IiB4Mj0iNDUzLjM3NSIgeTE9IjY2Ljk4NDQiIHkyPSI2Ni45ODQ0Ii8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSI0NjMuMzc1LDYyLjk4NDQsNDUzLjM3NSw2Ni45ODQ0LDQ2My4zNzUsNzAuOTg0NCw0NTkuMzc1LDY2Ljk4NDQiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS41OyIgeDE9IjQwOS44NzUiIHgyPSI0MDkuODc1IiB5MT0iNDcxLjQ4NDQiIHkyPSI0OTEuNDg0NCIvPjxwb2x5Z29uIGZpbGw9IiNBODAwMzYiIHBvaW50cz0iNDA1Ljg3NSw0ODEuNDg0NCw0MDkuODc1LDQ5MS40ODQ0LDQxMy44NzUsNDgxLjQ4NDQsNDA5Ljg3NSw0ODUuNDg0NCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjU7IiB4MT0iNDA5Ljg3NSIgeDI9IjQwOS44NzUiIHkxPSIzMCIgeTI9IjUwIi8+PHBvbHlnb24gZmlsbD0iI0E4MDAzNiIgcG9pbnRzPSI0MDUuODc1LDQwLDQwOS44NzUsNTAsNDEzLjg3NSw0MCw0MDkuODc1LDQ0IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuNTsiIHgxPSI0MDkuODc1IiB4Mj0iNDA5Ljg3NSIgeTE9IjUxNS40ODQ0IiB5Mj0iNTM1LjQ4NDQiLz48cG9seWdvbiBmaWxsPSIjQTgwMDM2IiBwb2ludHM9IjQwNS44NzUsNTI1LjQ4NDQsNDA5Ljg3NSw1MzUuNDg0NCw0MTMuODc1LDUyNS40ODQ0LDQwOS44NzUsNTI5LjQ4NDQiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6MS4wOyIvPjwhLS1NRDU9WzYwNjc2NWY2ZGJiZDAwYTIyN2RiZWViODBhMjk2N2E0XQpAc3RhcnR1bWwNCnN0YXJ0IA0KDQpyZXBlYXQgOkxvbmdQb2xsaW5nOw0KaWYgKEFwb2xsbyBjb25maWcgbm9ybWFsIHJlc3BvbnNlPykgdGhlbiAoeWVzKQ0KICAgIHN3aXRjaCAoaHR0cCBzdGF0dXMgY29kZT8pIA0KICAgIGNhc2UgKDIwMCkNCiAgICAgICAgOiB1cGRhdGUgbm90aWZpY2F0aW9uSWQ7DQogICAgICAgIHN3aXRjaCAoSFRUUCBnZXQgY29uZmlnIG5ld2VzdD8pDQogICAgICAgICAgICBjYXNlICgyMDApDQogICAgICAgICAgICAgICAgOiB1cGRhdGUgbG9jYWwgY2FjaGU7DQogICAgICAgICAgICBjYXNlICgzMDQpDQogICAgICAgICAgICAgICAgOiBubyBjaGFuZ2U7DQogICAgICAgIGVuZHN3aXRjaA0KICAgIGNhc2UgKDMwNCkNCiAgICAgICAgOiBubyBjaGFuZ2U7DQogICAgY2FzZSAob3RoZXIpDQogICAgICAgIDogb3RoZXI7DQogICAgZW5kc3dpdGNoDQplbHNlIChubykNCiAgICA6IEh0dHAgZXJyb3I7DQplbmRpZg0KDQpiYWNrd2FyZCA6c2xlZXA7DQpyZXBlYXQgd2hpbGUgKCkNCnN0b3ANCkBlbmR1bWwNCgpQbGFudFVNTCB2ZXJzaW9uIDEuMjAyMS42YmV0YTYoVW5rbm93biBjb21waWxlIHRpbWUpCihHUEwgc291cmNlIGRpc3RyaWJ1dGlvbikKSmF2YSBSdW50aW1lOiBKYXZhKFRNKSBTRSBSdW50aW1lIEVudmlyb25tZW50CkpWTTogSmF2YSBIb3RTcG90KFRNKSA2NC1CaXQgU2VydmVyIFZNCkRlZmF1bHQgRW5jb2Rpbmc6IFVURi04Ckxhbmd1YWdlOiBlbgpDb3VudHJ5OiBVUwotLT48L2c+PC9zdmc+'>
+
+<p>流程图不需要考虑很严谨的逻辑，因为有版本号，即使中间有异常，下次轮询的时候也可以恢复。</p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a target="_blank" rel="noopener" href="https://ably.com/blog/websockets-vs-long-polling">https://ably.com/blog/websockets-vs-long-polling</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2021/04/09/2021-04-10-mediasoup/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -204,7 +305,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -237,7 +338,7 @@
 <p>基于socket的transport在实际业务中非常浪费端口资源，一方面是因为作者并非将它设计为商业用途，另一方面mediasoup的STUN把自己也当成一个host，简单实现了协议功能。</p>
 <h2 id="源码结构"><a href="#源码结构" class="headerlink" title="源码结构"></a>源码结构</h2><p><a href="/images/svg/mediasoup.svg">mediasoup</a><br><img src="/images/svg/mediasoup.svg"></p>
 <h2 id="实现协议"><a href="#实现协议" class="headerlink" title="实现协议"></a>实现协议</h2><p>WebRTC实现连接的ICE和能力协商的SDP都属于描述性协议，并不严格规定具体的实现。</p>
-<img src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U2NyaXB0VHlwZT0iYXBwbGljYXRpb24vZWNtYXNjcmlwdCIgY29udGVudFN0eWxlVHlwZT0idGV4dC9jc3MiIGhlaWdodD0iMTkycHgiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHN0eWxlPSJ3aWR0aDo5MHB4O2hlaWdodDoxOTJweDsiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDkwIDE5MiIgd2lkdGg9IjkwcHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzPjxmaWx0ZXIgaGVpZ2h0PSIzMDAlIiBpZD0iZjlzeGE3NG5yMTNuMSIgd2lkdGg9IjMwMCUiIHg9Ii0xIiB5PSItMSI+PGZlR2F1c3NpYW5CbHVyIHJlc3VsdD0iYmx1ck91dCIgc3RkRGV2aWF0aW9uPSIyLjAiLz48ZmVDb2xvck1hdHJpeCBpbj0iYmx1ck91dCIgcmVzdWx0PSJibHVyT3V0MiIgdHlwZT0ibWF0cml4IiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIC40IDAiLz48ZmVPZmZzZXQgZHg9IjQuMCIgZHk9IjQuMCIgaW49ImJsdXJPdXQyIiByZXN1bHQ9ImJsdXJPdXQzIi8+PGZlQmxlbmQgaW49IlNvdXJjZUdyYXBoaWMiIGluMj0iYmx1ck91dDMiIG1vZGU9Im5vcm1hbCIvPjwvZmlsdGVyPjwvZGVmcz48Zz48bGluZSBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjEuMDtzdHJva2UtZGFzaGFycmF5OjUuMCw1LjA7IiB4MT0iNDciIHgyPSI0NyIgeTE9Ijg4LjI5NjkiIHkyPSIxMDguMjk2OSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9Ijc4IiB4PSI1IiB5PSI4NC45OTUxIj5tZWRpYXNvdXA8L3RleHQ+PGVsbGlwc2UgY3g9IjQ3IiBjeT0iMTUiIGZpbGw9IiNGRUZFQ0UiIGZpbHRlcj0idXJsKCNmOXN4YTc0bnIxM24xKSIgcng9IjgiIHJ5PSI4IiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjIuMDsiLz48cGF0aCBkPSJNNDcsMjMgTDQ3LDUwIE0zNCwzMSBMNjAsMzEgTTQ3LDUwIEwzNCw2NSBNNDcsNTAgTDYwLDY1ICIgZmlsbD0ibm9uZSIgZmlsdGVyPSJ1cmwoI2Y5c3hhNzRucjEzbjEpIiBzdHlsZT0ic3Ryb2tlOiNBODAwMzY7c3Ryb2tlLXdpZHRoOjIuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI3OCIgeD0iNSIgeT0iMTIwLjI5MiI+bWVkaWFzb3VwPC90ZXh0PjxlbGxpcHNlIGN4PSI0NyIgY3k9IjEzMy41OTM4IiBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZjlzeGE3NG5yMTNuMSkiIHJ4PSI4IiByeT0iOCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoyLjA7Ii8+PHBhdGggZD0iTTQ3LDE0MS41OTM4IEw0NywxNjguNTkzOCBNMzQsMTQ5LjU5MzggTDYwLDE0OS41OTM4IE00NywxNjguNTkzOCBMMzQsMTgzLjU5MzggTTQ3LDE2OC41OTM4IEw2MCwxODMuNTkzOCAiIGZpbGw9Im5vbmUiIGZpbHRlcj0idXJsKCNmOXN4YTc0bnIxM24xKSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoyLjA7Ii8+PCEtLU1ENT1bNGVhNmVlMDQzOTM2NjdiNmVjMTM3ZDgzMDFhYjNmZDJdCkBzdGFydHVtbA0KYWN0b3IgbWVkaWFzb3VwDQpAZW5kdW1sDQoKUGxhbnRVTUwgdmVyc2lvbiAxLjIwMjEuNWJldGEzKFVua25vd24gY29tcGlsZSB0aW1lKQooR1BMIHNvdXJjZSBkaXN0cmlidXRpb24pCkphdmEgUnVudGltZTogSmF2YShUTSkgU0UgUnVudGltZSBFbnZpcm9ubWVudApKVk06IEphdmEgSG90U3BvdChUTSkgNjQtQml0IFNlcnZlciBWTQpEZWZhdWx0IEVuY29kaW5nOiBVVEYtOApMYW5ndWFnZTogZW4KQ291bnRyeTogVVMKLS0+PC9nPjwvc3ZnPg=='>
+<img src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U2NyaXB0VHlwZT0iYXBwbGljYXRpb24vZWNtYXNjcmlwdCIgY29udGVudFN0eWxlVHlwZT0idGV4dC9jc3MiIGhlaWdodD0iMTkycHgiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHN0eWxlPSJ3aWR0aDo5MHB4O2hlaWdodDoxOTJweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA5MCAxOTIiIHdpZHRoPSI5MHB4IiB6b29tQW5kUGFuPSJtYWduaWZ5Ij48ZGVmcz48ZmlsdGVyIGhlaWdodD0iMzAwJSIgaWQ9ImY5c3hhNzRucjEzbjEiIHdpZHRoPSIzMDAlIiB4PSItMSIgeT0iLTEiPjxmZUdhdXNzaWFuQmx1ciByZXN1bHQ9ImJsdXJPdXQiIHN0ZERldmlhdGlvbj0iMi4wIi8+PGZlQ29sb3JNYXRyaXggaW49ImJsdXJPdXQiIHJlc3VsdD0iYmx1ck91dDIiIHR5cGU9Im1hdHJpeCIgdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAuNCAwIi8+PGZlT2Zmc2V0IGR4PSI0LjAiIGR5PSI0LjAiIGluPSJibHVyT3V0MiIgcmVzdWx0PSJibHVyT3V0MyIvPjxmZUJsZW5kIGluPSJTb3VyY2VHcmFwaGljIiBpbjI9ImJsdXJPdXQzIiBtb2RlPSJub3JtYWwiLz48L2ZpbHRlcj48L2RlZnM+PGc+PGxpbmUgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoxLjA7c3Ryb2tlLWRhc2hhcnJheTo1LjAsNS4wOyIgeDE9IjQ3IiB4Mj0iNDciIHkxPSI4OC4yOTY5IiB5Mj0iMTA4LjI5NjkiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI3OCIgeD0iNSIgeT0iODQuOTk1MSI+bWVkaWFzb3VwPC90ZXh0PjxlbGxpcHNlIGN4PSI0NyIgY3k9IjE1IiBmaWxsPSIjRkVGRUNFIiBmaWx0ZXI9InVybCgjZjlzeGE3NG5yMTNuMSkiIHJ4PSI4IiByeT0iOCIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoyLjA7Ii8+PHBhdGggZD0iTTQ3LDIzIEw0Nyw1MCBNMzQsMzEgTDYwLDMxIE00Nyw1MCBMMzQsNjUgTTQ3LDUwIEw2MCw2NSAiIGZpbGw9Im5vbmUiIGZpbHRlcj0idXJsKCNmOXN4YTc0bnIxM24xKSIgc3R5bGU9InN0cm9rZTojQTgwMDM2O3N0cm9rZS13aWR0aDoyLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNzgiIHg9IjUiIHk9IjEyMC4yOTIiPm1lZGlhc291cDwvdGV4dD48ZWxsaXBzZSBjeD0iNDciIGN5PSIxMzMuNTkzOCIgZmlsbD0iI0ZFRkVDRSIgZmlsdGVyPSJ1cmwoI2Y5c3hhNzRucjEzbjEpIiByeD0iOCIgcnk9IjgiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6Mi4wOyIvPjxwYXRoIGQ9Ik00NywxNDEuNTkzOCBMNDcsMTY4LjU5MzggTTM0LDE0OS41OTM4IEw2MCwxNDkuNTkzOCBNNDcsMTY4LjU5MzggTDM0LDE4My41OTM4IE00NywxNjguNTkzOCBMNjAsMTgzLjU5MzggIiBmaWxsPSJub25lIiBmaWx0ZXI9InVybCgjZjlzeGE3NG5yMTNuMSkiIHN0eWxlPSJzdHJva2U6I0E4MDAzNjtzdHJva2Utd2lkdGg6Mi4wOyIvPjwhLS1NRDU9WzdjZWZkM2QwN2FlZDQxMDk1NjIyNzE1MmNlZTU0NDk2XQpAc3RhcnR1bWwNCmFjdG9yIG1lZGlhc291cA0KQGVuZHVtbA0KClBsYW50VU1MIHZlcnNpb24gMS4yMDIxLjZiZXRhNihVbmtub3duIGNvbXBpbGUgdGltZSkKKEdQTCBzb3VyY2UgZGlzdHJpYnV0aW9uKQpKYXZhIFJ1bnRpbWU6IEphdmEoVE0pIFNFIFJ1bnRpbWUgRW52aXJvbm1lbnQKSlZNOiBKYXZhIEhvdFNwb3QoVE0pIDY0LUJpdCBTZXJ2ZXIgVk0KRGVmYXVsdCBFbmNvZGluZzogVVRGLTgKTGFuZ3VhZ2U6IGVuCkNvdW50cnk6IFVTCi0tPjwvZz48L3N2Zz4='>
 
 
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://github.com/versatica/mediasoup">源码实现</a></p>
@@ -294,7 +395,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -425,7 +526,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -500,7 +601,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -574,7 +675,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -659,7 +760,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -800,7 +901,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -894,7 +995,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1110,7 +1211,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
+                <time title="修改时间：2021-05-09 13:55:54" itemprop="dateModified" datetime="2021-05-09T13:55:54+08:00">2021-05-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1221,158 +1322,11 @@ $jekyll serve
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://byyam.github.io/2014/02/27/2014-02-28-research-of-gcov/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Yam">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Yam's Notebook">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2014/02/27/2014-02-28-research-of-gcov/" class="post-title-link" itemprop="url">Research of gcov</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2014-02-28 00:00:00" itemprop="dateCreated datePublished" datetime="2014-02-28T00:00:00+08:00">2014-02-28</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-04-26 13:54:37" itemprop="dateModified" datetime="2021-04-26T13:54:37+08:00">2021-04-26</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/gcov/" itemprop="url" rel="index"><span itemprop="name">gcov</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="编译安装合适的gcc版本"><a href="#编译安装合适的gcc版本" class="headerlink" title="编译安装合适的gcc版本"></a>编译安装合适的gcc版本</h2><p>下载gcc包<br><code>gcc-version-xx.tar.bz2</code></p>
-<p>解压<br><code>tar -jxvf gcc-version-xx.tar.bz2</code></p>
-<p>进入目录<br><code>cd gcc-version-xx</code></p>
-<p>执行configure试一下看缺少了什么依赖<br><code>./configure</code></p>
-<p>(如本次缺少两个库，<code>mpfr</code> 和 <code>gmp</code>，可以用软件管理器安装，也可以自己添加库。</p>
-<p>下载这两个包，解压放在gcc-version-xx目录，并且把目录的版本号删掉，名字改为： mpfr 和 gmp )<br>再试一下是否生成了Makefile文件</p>
-<p><code>../gcc-version-xx/configure --prefix=yourdir/gcc-version-xx/</code></p>
-<h2 id="编译包含flush-gcov函数的库：静态库与共享库的区别"><a href="#编译包含flush-gcov函数的库：静态库与共享库的区别" class="headerlink" title="编译包含flush gcov函数的库：静态库与共享库的区别"></a>编译包含flush gcov函数的库：静态库与共享库的区别</h2><blockquote>
-<p>动态库（-fprofile-arcs -ftest-coverage可能是第二步不必要的选项）</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -c -fPIC libats.c -fprofile-arcs -ftest-coverage</span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage -shared -o libats.so libats.o</span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage test.c -g -L. -lats -Iats -o test</span><br></pre></td></tr></table></figure>
-
-<p>运行期间刷出的gcda只是libats的</p>
-<blockquote>
-<p>静态库</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -c libats.c -fprofile-arcs -ftest-coverage</span><br><span class="line"></span><br><span class="line">ar -cr libats.a libats.o </span><br><span class="line"></span><br><span class="line">gcc -fprofile-arcs -ftest-coverage test.c -g -L. -lats -Iats -o test</span><br></pre></td></tr></table></figure>
-
-<p>运行期间刷出的gcda是libats和test全部的</p>
-<p>this program is not .so<br>flush gcov的范围是this program</p>
-<p>readelf -l objectfile<br>动态链接库是有自己的program header<br>被编译进来或者静态库没有program header</p>
-<blockquote>
-<p>结论</p>
-</blockquote>
-<p>包含libgcov.a并在运行期间调用flush_gcov函数，只能在静态库中操作，因为动态库有自己的program header。</p>
-<p>除此之外，一般的函数静态或动态编译并没本质区别。只是加载时期不同而已。</p>
-<h2 id="编译处理过程"><a href="#编译处理过程" class="headerlink" title="编译处理过程"></a>编译处理过程</h2><blockquote>
-<p>预处理 -E</p>
-</blockquote>
-<p>程序员代码-&gt;编译器识别的代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -E test_merge_gcda.c -o test_merge_gcda.i</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>编译 -S</p>
-</blockquote>
-<p>代码-&gt;汇编代码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -S test_merge_gcda.i </span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>合并以上两步</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -S -ftest-coverage -fprofile-arcs test.i</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>汇编 -c</p>
-</blockquote>
-<p>代码-&gt;机器码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -c test_merge_gcda.s -o test_merge_gcda.o</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>链接</p>
-</blockquote>
-<p>机器码-&gt;可执行文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# gcc -o test_merge_gcda test_merge_gcda.o</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>合并以上两步</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test_merge_gcda test_merge_gcda.o -lgov</span><br></pre></td></tr></table></figure>
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Test gcov]# ls</span><br><span class="line">test_merge_gcda  test_merge_gcda.c  test_merge_gcda.i  test_merge_gcda.o  test_merge_gcda.s</span><br></pre></td></tr></table></figure>
-
-<h2 id="gcc-coverage理解"><a href="#gcc-coverage理解" class="headerlink" title="gcc coverage理解"></a>gcc coverage理解</h2><h4 id="生成gcno的原理？"><a href="#生成gcno的原理？" class="headerlink" title="生成gcno的原理？"></a>生成gcno的原理？</h4><p>在汇编代码插入gcov的一些计数器，链接生成可执行文件时，生成gcno文件。</p>
-<h4 id="在哪插入？"><a href="#在哪插入？" class="headerlink" title="在哪插入？"></a>在哪插入？</h4><p>每个BB后面会插入一个，具体说应该是连通各个的地方。(但是逻辑图和实际图不一致，因此stub并不等于arc)</p>
-<h4 id="何为BB？"><a href="#何为BB？" class="headerlink" title="何为BB？"></a>何为BB？</h4><p>basic block， 基本块。<br>每个基本块只有一个入口，一个出口，因此是原子的。<br>同一行代码可以同时属于多个BB。</p>
-<h4 id="生成gcda的原理？"><a href="#生成gcda的原理？" class="headerlink" title="生成gcda的原理？"></a>生成gcda的原理？</h4><p>执行时，被插入的代码会记录每个arc被运行的次数（counter），程序执行结束，最后一个被插入代码会把counter信息写入gcda文件。</p>
-<h4 id="生成gcov的原理？"><a href="#生成gcov的原理？" class="headerlink" title="生成gcov的原理？"></a>生成gcov的原理？</h4><p>根据BB和分支记录的原始信息，和运行时的counter信息（或加之源文件），算出每行被执行的次数。</p>
-<h4 id="gcov记录的信息？"><a href="#gcov记录的信息？" class="headerlink" title="gcov记录的信息？"></a>gcov记录的信息？</h4><p>BB和分支。</p>
-<h4 id="gcda记录的信息？"><a href="#gcda记录的信息？" class="headerlink" title="gcda记录的信息？"></a>gcda记录的信息？</h4><p>执行时每个arc被运行的次数，推算出每个BB执行的次数，从而算出每个函数执行次数。</p>
-<p>如何分析代码产生BB，即确定插桩stub位置？<br>此问题即对应bb图和源码行，从二维到一维的关系。</p>
-<h4 id="gcno中block，arcs，line？"><a href="#gcno中block，arcs，line？" class="headerlink" title="gcno中block，arcs，line？"></a>gcno中block，arcs，line？</h4><p>实际BB，虚拟BB。<br>虚拟BB包括start和end，中间也可能存在虚拟BB。</p>
-<p>LINE数目为真实BB的个数，记录的是每个BB在哪个文件所对应的行数。（因为有可能编译的时候包括进来其他文件）<br>ARCS数目为所有BB个数-1，即每个有出度的BB，所指向的BB号码。</p>
-<p>每个ARCS长度为（1+出度*2），表示的是，自身BB标号+指向BB标号和?<br>（源码里是dest和flag）</p>
-<h4 id="如果根据gcda记录的-arc-counter信息确定每个bb执行次数？"><a href="#如果根据gcda记录的-arc-counter信息确定每个bb执行次数？" class="headerlink" title="如果根据gcda记录的 arc counter信息确定每个bb执行次数？"></a>如果根据gcda记录的 arc counter信息确定每个bb执行次数？</h4><p>arc counter的个数为插桩点的个数，从源码线性确定每个分段被执行过的路径。</p>
-<h4 id="何为branch？"><a href="#何为branch？" class="headerlink" title="何为branch？"></a>何为branch？</h4><p>传统理解的分支，一个逻辑块。</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/yamcheung/yamcov">我的代码实现</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -1437,7 +1391,7 @@ $jekyll serve
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

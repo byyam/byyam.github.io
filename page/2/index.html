@@ -20,32 +20,28 @@
     var CONFIG = {"hostname":"byyam.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="编译安装合适的gcc版本下载gcc包gcc-version-xx.tar.bz2 解压tar -jxvf gcc-version-xx.tar.bz2 进入目录cd gcc-version-xx 执行configure试一下看缺少了什么依赖.&#x2F;configure (如本次缺少两个库，mpfr 和 gmp，可以用软件管理器安装，也可以自己添加库。 下载这两个包，解压放在gcc-version-xx目">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Research of gcov">
-<meta property="og:url" content="https://byyam.github.io/2014/02/27/2014-02-28-research-of-gcov/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Yam&#39;s Notebook">
+<meta property="og:url" content="https://byyam.github.io/page/2/index.html">
 <meta property="og:site_name" content="Yam&#39;s Notebook">
-<meta property="og:description" content="编译安装合适的gcc版本下载gcc包gcc-version-xx.tar.bz2 解压tar -jxvf gcc-version-xx.tar.bz2 进入目录cd gcc-version-xx 执行configure试一下看缺少了什么依赖.&#x2F;configure (如本次缺少两个库，mpfr 和 gmp，可以用软件管理器安装，也可以自己添加库。 下载这两个包，解压放在gcc-version-xx目">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2014-02-27T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-05-09T05:55:54.337Z">
 <meta property="article:author" content="Yam">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://byyam.github.io/2014/02/27/2014-02-28-research-of-gcov/">
+<link rel="canonical" href="https://byyam.github.io/page/2/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
-    isPost : true,
+    isHome : true,
+    isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Research of gcov | Yam's Notebook</title>
+  <title>Yam's Notebook</title>
   
 
 
@@ -171,10 +167,9 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content index posts-expand">
             
-
-    
+      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -190,9 +185,10 @@
       <meta itemprop="name" content="Yam's Notebook">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          Research of gcov
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2014/02/27/2014-02-28-research-of-gcov/" class="post-title-link" itemprop="url">Research of gcov</a>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -231,7 +227,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="编译安装合适的gcc版本"><a href="#编译安装合适的gcc版本" class="headerlink" title="编译安装合适的gcc版本"></a>编译安装合适的gcc版本</h2><p>下载gcc包<br><code>gcc-version-xx.tar.bz2</code></p>
+          <h2 id="编译安装合适的gcc版本"><a href="#编译安装合适的gcc版本" class="headerlink" title="编译安装合适的gcc版本"></a>编译安装合适的gcc版本</h2><p>下载gcc包<br><code>gcc-version-xx.tar.bz2</code></p>
 <p>解压<br><code>tar -jxvf gcc-version-xx.tar.bz2</code></p>
 <p>进入目录<br><code>cd gcc-version-xx</code></p>
 <p>执行configure试一下看缺少了什么依赖<br><code>./configure</code></p>
@@ -309,31 +305,25 @@
 <h4 id="何为branch？"><a href="#何为branch？" class="headerlink" title="何为branch？"></a>何为branch？</h4><p>传统理解的分支，一个逻辑块。</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/yamcheung/yamcov">我的代码实现</a></p>
 
+      
     </div>
 
     
     
     
-
       <footer class="post-footer">
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item"></div>
-      <div class="post-nav-item">
-    <a href="/2015/09/19/2015-09-19-how-to-post-on-gitpages/" rel="next" title="使用GitPage管理博客">
-      使用GitPage管理博客 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
+        <div class="post-eof"></div>
       </footer>
-    
   </article>
   
   
   
+
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
 
 
 
@@ -385,7 +375,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E5%90%88%E9%80%82%E7%9A%84gcc%E7%89%88%E6%9C%AC"><span class="nav-number">1.</span> <span class="nav-text">编译安装合适的gcc版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%8C%85%E5%90%ABflush-gcov%E5%87%BD%E6%95%B0%E7%9A%84%E5%BA%93%EF%BC%9A%E9%9D%99%E6%80%81%E5%BA%93%E4%B8%8E%E5%85%B1%E4%BA%AB%E5%BA%93%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.</span> <span class="nav-text">编译包含flush gcov函数的库：静态库与共享库的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%A4%84%E7%90%86%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">编译处理过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc-coverage%E7%90%86%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">gcc coverage理解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90gcno%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-number">4.0.1.</span> <span class="nav-text">生成gcno的原理？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9C%A8%E5%93%AA%E6%8F%92%E5%85%A5%EF%BC%9F"><span class="nav-number">4.0.2.</span> <span class="nav-text">在哪插入？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%95%E4%B8%BABB%EF%BC%9F"><span class="nav-number">4.0.3.</span> <span class="nav-text">何为BB？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90gcda%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-number">4.0.4.</span> <span class="nav-text">生成gcda的原理？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90gcov%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9F"><span class="nav-number">4.0.5.</span> <span class="nav-text">生成gcov的原理？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcov%E8%AE%B0%E5%BD%95%E7%9A%84%E4%BF%A1%E6%81%AF%EF%BC%9F"><span class="nav-number">4.0.6.</span> <span class="nav-text">gcov记录的信息？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcda%E8%AE%B0%E5%BD%95%E7%9A%84%E4%BF%A1%E6%81%AF%EF%BC%9F"><span class="nav-number">4.0.7.</span> <span class="nav-text">gcda记录的信息？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gcno%E4%B8%ADblock%EF%BC%8Carcs%EF%BC%8Cline%EF%BC%9F"><span class="nav-number">4.0.8.</span> <span class="nav-text">gcno中block，arcs，line？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E6%A0%B9%E6%8D%AEgcda%E8%AE%B0%E5%BD%95%E7%9A%84-arc-counter%E4%BF%A1%E6%81%AF%E7%A1%AE%E5%AE%9A%E6%AF%8F%E4%B8%AAbb%E6%89%A7%E8%A1%8C%E6%AC%A1%E6%95%B0%EF%BC%9F"><span class="nav-number">4.0.9.</span> <span class="nav-text">如果根据gcda记录的 arc counter信息确定每个bb执行次数？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%95%E4%B8%BAbranch%EF%BC%9F"><span class="nav-number">4.0.10.</span> <span class="nav-text">何为branch？</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

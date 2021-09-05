@@ -166,4 +166,4 @@ arc counter的个数为插桩点的个数，从源码线性确定每个分段被
 #### 何为branch？
 传统理解的分支，一个逻辑块。
 
-[我的代码实现](https://github.com/yamcheung/yamcov)
+[我的代码实现](https://github.com/byyam/yamcov)

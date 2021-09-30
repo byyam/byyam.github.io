@@ -217,3 +217,5 @@ WebSocket定义了3种类型的控制消息（control message）：close, ping a
 [https://godoc.org/github.com/gorilla/websocket](https://godoc.org/github.com/gorilla/websocket)
 
 [https://github.com/gorilla/websocket](https://github.com/gorilla/websocket)
+
+[websocket ping/pong timeout](https://github.com/gorilla/websocket/blob/master/examples/chat/client.go)

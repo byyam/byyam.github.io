@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"byyam.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+    var CONFIG = {"hostname":"byyam.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":"flat"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
   <meta property="og:type" content="website">
@@ -204,7 +204,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -227,20 +227,20 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h3 id="Pion是什么"><a href="#Pion是什么" class="headerlink" title="Pion是什么"></a>Pion是什么</h3><p>golang实现的webrtc。</p>
-<h3 id="webrtc-peerconnection"><a href="#webrtc-peerconnection" class="headerlink" title="webrtc peerconnection"></a>webrtc peerconnection</h3><p>webrtc里最基本的模块就是peerconnection，代码里经常缩写成pc。</p>
+          <h1 id="Pion是什么"><a href="#Pion是什么" class="headerlink" title="Pion是什么"></a>Pion是什么</h1><p>golang实现的webrtc。</p>
+<h2 id="webrtc-peerconnection"><a href="#webrtc-peerconnection" class="headerlink" title="webrtc peerconnection"></a>webrtc peerconnection</h2><p>webrtc里最基本的模块就是peerconnection，代码里经常缩写成pc。</p>
 <p>peerconnection对外提供的接口有一部分是On开头的，用于在peerconnection内部发生某事件的回调接口。</p>
 <p>使用默认配置新建pc</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pc, err :&#x3D; webrtc.NewPeerConnection(config)</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pc, err := webrtc.NewPeerConnection(config)</span><br></pre></td></tr></table></figure>
 
 <p>或使用自定义配置新建pc</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peerConnection, err :&#x3D; webrtc.NewAPI(webrtc.WithMediaEngine(m), webrtc.WithInterceptorRegistry(i)).NewPeerConnection(config)</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">peerConnection, err := webrtc.NewAPI(webrtc.WithMediaEngine(m), webrtc.WithInterceptorRegistry(i)).NewPeerConnection(config)</span><br></pre></td></tr></table></figure>
 
 <p>NewAPI接口设计使用<code>Function Option</code>的编程模式，扩展性好。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; webrtc可自定义的引擎和调用链，都定义为私有，只能在初始化时从外部指定</span><br><span class="line">type API struct &#123;</span><br><span class="line">	settingEngine       *SettingEngine &#x2F;&#x2F; 和ICE，NAT，DTLS等相关的功能，几乎都是标准流程，可定制化的内容很少</span><br><span class="line">	mediaEngine         *MediaEngine &#x2F;&#x2F; 和pc能力相关的参数，比如codec，extension等</span><br><span class="line">	interceptorRegistry *interceptor.Registry &#x2F;&#x2F; 和RTP&#x2F;RTCP包处理相关的功能，比如JitterBuffer，NACK，TWCC等</span><br><span class="line"></span><br><span class="line">	interceptor interceptor.Interceptor &#x2F;&#x2F; Generated per PeerConnection</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 对外初始化接口，可灵活扩展</span><br><span class="line">func NewAPI(options ...func(*API)) *API &#123;</span><br><span class="line">	a :&#x3D; &amp;API&#123;interceptor: &amp;interceptor.NoOp&#123;&#125;&#125;</span><br><span class="line"></span><br><span class="line">	for _, o :&#x3D; range options &#123;</span><br><span class="line">		o(a)</span><br><span class="line">	&#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 外部可自定义实例化这个成员</span><br><span class="line">func WithInterceptorRegistry(interceptorRegistry *interceptor.Registry) func(a *API) &#123;</span><br><span class="line">	return func(a *API) &#123;</span><br><span class="line">		a.interceptorRegistry &#x3D; interceptorRegistry</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webrtc可自定义的引擎和调用链，都定义为私有，只能在初始化时从外部指定</span></span><br><span class="line"><span class="keyword">type</span> API <span class="keyword">struct</span> &#123;</span><br><span class="line">	settingEngine       *SettingEngine <span class="comment">// 和ICE，NAT，DTLS等相关的功能，几乎都是标准流程，可定制化的内容很少</span></span><br><span class="line">	mediaEngine         *MediaEngine <span class="comment">// 和pc能力相关的参数，比如codec，extension等</span></span><br><span class="line">	interceptorRegistry *interceptor.Registry <span class="comment">// 和RTP/RTCP包处理相关的功能，比如JitterBuffer，NACK，TWCC等</span></span><br><span class="line"></span><br><span class="line">	interceptor interceptor.Interceptor <span class="comment">// Generated per PeerConnection</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对外初始化接口，可灵活扩展</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewAPI</span><span class="params">(options ...<span class="keyword">func</span>(*API)</span>) *<span class="title">API</span></span> &#123;</span><br><span class="line">	a := &amp;API&#123;interceptor: &amp;interceptor.NoOp&#123;&#125;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, o := <span class="keyword">range</span> options &#123;</span><br><span class="line">		o(a)</span><br><span class="line">	&#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 外部可自定义实例化这个成员</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WithInterceptorRegistry</span><span class="params">(interceptorRegistry *interceptor.Registry)</span> <span class="title">func</span><span class="params">(a *API)</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(a *API)</span></span> &#123;</span><br><span class="line">		a.interceptorRegistry = interceptorRegistry</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-<h4 id="ICE"><a href="#ICE" class="headerlink" title="ICE"></a>ICE</h4><h4 id="interceptor"><a href="#interceptor" class="headerlink" title="interceptor"></a>interceptor</h4><p>处理RTP/RTCP流的框架，它定义了一套处理数据包的interface，实例化函数接口必须按照指定格式进行调用，这个接口定义为<code>Interceptor</code>。</p>
+<h3 id="ICE"><a href="#ICE" class="headerlink" title="ICE"></a>ICE</h3><h3 id="interceptor"><a href="#interceptor" class="headerlink" title="interceptor"></a>interceptor</h3><p>处理RTP/RTCP流的框架，它定义了一套处理数据包的interface，实例化函数接口必须按照指定格式进行调用，这个接口定义为<code>Interceptor</code>。</p>
 <ul>
 <li><p><code>BindRTCPReader</code> 和 <code>BindRTCPWriter</code> 处理incoming和outgoing的RTCP包。</p>
 </li>
@@ -252,8 +252,22 @@
 <p>chain结构体把interceptor串行在一起，并保证interceptor的执行顺序。</p>
 <p>streamInfo是处理媒体流的上下文，用于在interceptor之间传递信息。</p>
 <p>对外提供registry结构体，在chain上的又一层封装，暴露Add和Build接口。</p>
-<h5 id="NACK-interceptor的实现"><a href="#NACK-interceptor的实现" class="headerlink" title="NACK interceptor的实现"></a>NACK interceptor的实现</h5><p><code>receive logs</code>记录了接收到的sequence number。</p>
-<h5 id="TWCC-interceptor的实现"><a href="#TWCC-interceptor的实现" class="headerlink" title="TWCC interceptor的实现"></a>TWCC interceptor的实现</h5><h5 id="SR-RR-interceptor的实现"><a href="#SR-RR-interceptor的实现" class="headerlink" title="SR/RR interceptor的实现"></a>SR/RR interceptor的实现</h5>
+<p>它提供了一个<code>type NoOp struct&#123;&#125;</code>的结构体，任何需要实例化interceptor的结构体都可以继承它。</p>
+<h4 id="NACK-interceptor的实现"><a href="#NACK-interceptor的实现" class="headerlink" title="NACK interceptor的实现"></a>NACK interceptor的实现</h4><p><code>GeneratorInterceptor</code> 是NACK interceptor对外提供的接口。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> GeneratorInterceptor <span class="keyword">struct</span> &#123;</span><br><span class="line">	interceptor.NoOp <span class="comment">// 继承interceptor</span></span><br><span class="line">	size      <span class="keyword">uint16</span> <span class="comment">// receiveLog参数</span></span><br><span class="line">	skipLastN <span class="keyword">uint16</span> <span class="comment">// receiveLog参数</span></span><br><span class="line">	interval  time.Duration <span class="comment">// 发送RTCP包间隔</span></span><br><span class="line">	m         sync.Mutex <span class="comment">// 这个结构体的锁</span></span><br><span class="line">	wg        sync.WaitGroup <span class="comment">// RTCP writer loop结束才可以关闭的控制</span></span><br><span class="line">	<span class="built_in">close</span>     <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125; <span class="comment">// 控制关闭</span></span><br><span class="line">	log       logging.LeveledLogger</span><br><span class="line"></span><br><span class="line">	receiveLogs   <span class="keyword">map</span>[<span class="keyword">uint32</span>]*receiveLog <span class="comment">// 记录了接收到的sequence number， key为SSRC</span></span><br><span class="line">	receiveLogsMu sync.Mutex <span class="comment">// receiveLog的map锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="状态控制"><a href="#状态控制" class="headerlink" title="状态控制"></a>状态控制</h5><p>实例化了interceptor的 <code>UnbindLocalStream</code>和<code>BindRemoteStream</code> 用于处理收到的RTP包， 在收到RTP包时将seq num记录在对应SSRC的receiveLog里。<br>实例化了interceptor的 <code>BindRTCPWriter</code> 用于反馈RTCP包，这里起了一个goroutine异步处理， 按定时器间隔来检查receiveLog。</p>
+<h5 id="receiveLog实现"><a href="#receiveLog实现" class="headerlink" title="receiveLog实现"></a>receiveLog实现</h5><p>receiveLog是interceptor里实现NACK的重要结构体，它记录了一段连续的包是否收到的情况。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> receiveLog <span class="keyword">struct</span> &#123;</span><br><span class="line">	packets         []<span class="keyword">uint64</span> <span class="comment">// 记录RTP每个包是否收到的bitmap，使用uint64可标识64个包，因此size必须为64的整数倍</span></span><br><span class="line">	size            <span class="keyword">uint16</span> <span class="comment">// 可记录连续的RTP包的总数量</span></span><br><span class="line">	end             <span class="keyword">uint16</span> <span class="comment">// 记录收到的最后一个seq</span></span><br><span class="line">	started         <span class="keyword">bool</span> <span class="comment">// 第一个包，初始化上下文</span></span><br><span class="line">	lastConsecutive <span class="keyword">uint16</span> <span class="comment">// 记录收到的最后一个连续的seq，查找丢失包时，遍历它到end之间即可</span></span><br><span class="line">	m               sync.RWMutex <span class="comment">// 并发锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用uint64数组当bitmap，记录收到的RTP包，收到时将bit置1，删除时置0。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *receiveLog)</span> <span class="title">setReceived</span><span class="params">(seq <span class="keyword">uint16</span>)</span></span> &#123;</span><br><span class="line">	pos := seq % s.size</span><br><span class="line">	s.packets[pos/<span class="number">64</span>] |= <span class="number">1</span> &lt;&lt; (pos % <span class="number">64</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *receiveLog)</span> <span class="title">delReceived</span><span class="params">(seq <span class="keyword">uint16</span>)</span></span> &#123;</span><br><span class="line">	pos := seq % s.size</span><br><span class="line">	s.packets[pos/<span class="number">64</span>] &amp;^= <span class="number">1</span> &lt;&lt; (pos % <span class="number">64</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *receiveLog)</span> <span class="title">getReceived</span><span class="params">(seq <span class="keyword">uint16</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	pos := seq % s.size</span><br><span class="line">	<span class="keyword">return</span> (s.packets[pos/<span class="number">64</span>] &amp; (<span class="number">1</span> &lt;&lt; (pos % <span class="number">64</span>))) != <span class="number">0</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>每收到一个包，刷新连续的最后一个位置<code>lastConsecutive</code>和记录seq最大的那个位置<code>end</code>。<br>以便在间隔时间检查需要重传包时，只需遍历从<code>lastConsecutive</code>到<code>end</code>之间的那段bit是否为0即可。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *receiveLog)</span> <span class="title">fixLastConsecutive</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := s.lastConsecutive + <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> ; i != s.end+<span class="number">1</span> &amp;&amp; s.getReceived(i); i++ &#123;</span><br><span class="line">		<span class="comment">// find all consecutive packets</span></span><br><span class="line">	&#125;</span><br><span class="line">	s.lastConsecutive = i - <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于bitmap的size标识的是一段时间内需要重传的RTP包，每收到一个新的seq时，需要判断这段buffer是否翻转，并清空从end到seq之间的记录。</p>
+<h4 id="TWCC-interceptor的实现"><a href="#TWCC-interceptor的实现" class="headerlink" title="TWCC interceptor的实现"></a>TWCC interceptor的实现</h4><h4 id="SR-RR-interceptor的实现"><a href="#SR-RR-interceptor的实现" class="headerlink" title="SR/RR interceptor的实现"></a>SR/RR interceptor的实现</h4>
       
     </div>
 
@@ -303,7 +317,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -415,7 +429,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -505,7 +519,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -636,7 +650,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -712,7 +726,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -786,7 +800,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -871,7 +885,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -962,6 +976,7 @@
 <p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/WebSocket">https://zh.wikipedia.org/wiki/WebSocket</a></p>
 <p><a target="_blank" rel="noopener" href="https://godoc.org/github.com/gorilla/websocket">https://godoc.org/github.com/gorilla/websocket</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket">https://github.com/gorilla/websocket</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/gorilla/websocket/blob/master/examples/chat/client.go">websocket ping/pong timeout</a></p>
 
       
     </div>
@@ -1012,7 +1027,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1106,7 +1121,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-09-26 17:46:51" itemprop="dateModified" datetime="2021-09-26T17:46:51+08:00">2021-09-26</time>
+                <time title="修改时间：2021-09-30 21:17:22" itemprop="dateModified" datetime="2021-09-30T21:17:22+08:00">2021-09-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">

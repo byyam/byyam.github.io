@@ -40,6 +40,8 @@ WebRTC实现连接的ICE和能力协商的SDP都属于描述性协议，并不�
 
 
 ``` plantuml
+skinparam NoteBackgroundColor white
+
 webrtc --> client : getMediaDevice 
 client -> demo : getRouterRtpCapabilities
 activate demo

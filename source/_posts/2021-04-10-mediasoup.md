@@ -102,6 +102,114 @@ note right : 有新上行，给其他成员创建下行转发
 
 
 ```
+## 动手实现一个Mediasoup client
+
+使用pion提供的webrtc库实现一个可以对接mediasoup的client小工具，使用的语言主要为golang。
+
+### 建立媒体传输通道
+因为mediasoup把SDP拆成了几条信令在websocket上协商，因此需要把SDP中的字段拆解成所需要的字段封装在client端和给mediasoup server。
+
+#### ICE
+
+从webrtc transport信令中拿到candidate列表，因为mediasoup是lite的ICE，client端是controlling，mediasoup是controlled，只需要从client去建立连接即可。
+
+``` golang
+
+// 创建ice agent
+iceAgent, err := ice.NewAgent(&ice.AgentConfig{
+    NetworkTypes: []ice.NetworkType{ice.NetworkTypeUDP4},
+})
+
+// 把candidate加入ice的列表里
+iceAgent.AddRemoteCandidate(candidate)
+
+// 建立连接
+iceConn, err := iceAgent.Dial(context.Background(), rsp.Answer.IceParameters.UsernameFragment, rsp.Answer.IceParameters.Password)
+
+```
+
+至此，和webrtctransport的ice连接就建立了一半，接下来在ice的基础上做dtls密钥交换。
+
+#### DTLS
+
+mediasoup支持双向的dtls连接，dtls之后将密钥导出到ice的connection，对rtp的payload进行加密，媒体数据走的是srtp标准协议。
+
+生成dtls证书和指纹
+
+``` golang
+
+    // 不使用pem证书文件，自签名生成证书，对证书计算摘要
+	var tlsCerts []tls.Certificate
+	certificate, err := selfsign.GenerateSelfSigned()
+	if err != nil {
+		return mediasoupFPs, tlsCerts, err
+	}
+	x509cert, err := x509.ParseCertificate(certificate.Certificate[0])
+	if err != nil {
+		return mediasoupFPs, tlsCerts, err
+	}
+	actualSHA256, err := fingerprint.Fingerprint(x509cert, crypto.SHA256)
+	if err != nil {
+		return mediasoupFPs, tlsCerts, err
+	}
+
+```
+
+将dtls指纹参数通过信令发送给mediasoup，然后进行dtls连接即可，dtls可使用server也可以使用client，通过信令参数均可调整。
+
+``` golang
+
+	config := &dtls.Config{
+		Certificates:         tlsCerts,
+		ExtendedMasterSecret: dtls.RequireExtendedMasterSecret,
+		// Create timeout context for accepted connection.
+		ConnectContextMaker: func() (context.Context, func()) {
+			return context.WithTimeout(context.Background(), 30*time.Second)
+		},
+		SRTPProtectionProfiles: []dtls.SRTPProtectionProfile{dtls.SRTP_AES128_CM_HMAC_SHA1_80},
+	}
+
+    dtlsConn, err := dtls.Server(iceConn, config) // or Client
+
+```
+
+至此，媒体通道webrtc transport已经建立。
+
+
+### 媒体传输
+
+srtp不需要对整个数据包进行加密，因此收发数据仍然是在ice的connection上进行，但是将dtls的密钥导出用于加密每一个rtp的payload。
+
+``` golang
+
+    // 导出dtls密钥
+	srtpConfig := &srtp.Config{
+		Profile: srtp.ProtectionProfileAes128CmHmacSha1_80,
+	}
+
+	connState := dtlsConn.ConnectionState()
+	if err := srtpConfig.ExtractSessionKeysFromDTLS(&connState, false); err != nil {
+		return nil, fmt.Errorf("errDtlsKeyExtractionFailed: %v", err)
+	}
+
+    // 建立srtp session
+    srtpSession, err := srtp.NewSessionSRTP(iceConn, srtpConfig)
+
+    // 建立srtp读写handler
+    rtpWriteStream, err := srtpSession.OpenWriteStream()
+
+    // 建立srtcp session
+    srtcpSession, err := srtp.NewSessionSRTCP(iceConn, srtpConfig)
+
+    // 建立srtcp读写handler
+    rtcpReadStream, err := srtcpSession.OpenReadStream(opt.SSRC)
+
+```
+
+将RTP包的header和payload分别填入handler即可在之前建立的媒体通道上进行收发媒体。
+
+
+
 
 
 ## 参考资料

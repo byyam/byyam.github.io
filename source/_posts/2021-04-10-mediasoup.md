@@ -13,19 +13,34 @@ categories: media
 
 v3版本源码实现了SFU的基本转发功能，由C++部分的worker和TS部分的信令组成。这两部分之间用Unix domain socket通信，是进程之间的全双工通信方式，基于文件系统，不需要走协议栈，因此必须同机部署。
 
-**router**
-
-逻辑层抽象，代表了通话的房间。
-
 **peer**
 
 逻辑层抽象，代表了通话的成员。
+
+**room** 
+
+逻辑层通常和router绑定，代表了通话的房间。
+
+**router**
+
+模型层代表了媒体流转发的单元，一个router内包含了transport, producer, consumer这些模型的实例。
+记录了transport和流的包含关系，还有producer和consumer的映射关系，主要负责从transport中获取数据包和producer/consumer的流媒体转发。
 
 **transport**
 
 数据层抽象，代表了一路socket层面的数据流，可以承载多个RTP stream。通常一个典型的通话里，上行和下行需要分别建立两个socket连接，就是两个transport。客户端与mediasoup之间的transport通常是`webrtcTransport`。mediasoup之间的routers也可以建立transport实现级联关系，通常是`pipeTransport`。发给GStreamer和ffmepg的为`plainTransport`。
 
-基于socket的transport在实际业务中非常浪费端口资源，一方面是因为作者并非将它设计为商业用途，另一方面mediasoup的STUN把自己也当成一个host，简单实现了协议功能。
+基于socket的webrtcTransport的ICE只支持Lite模式，一方面是因为作者并非将它设计为商业用途，另一方面mediasoup的STUN把自己也当成一个host，简单实现了协议功能。
+
+**producer**
+
+媒体流的生产者。
+
+**consumer**
+
+媒体流的消费者。
+
+
 
 ## 源码结构
 

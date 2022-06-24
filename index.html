@@ -204,7 +204,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -289,11 +289,11 @@
 <p>streamInfo是处理媒体流的上下文，用于在interceptor之间传递信息。</p>
 <p>对外提供registry结构体，在chain上的又一层封装，暴露Add和Build接口。</p>
 <p>它提供了一个<code>type NoOp struct&#123;&#125;</code>的结构体，任何需要实例化interceptor的结构体都可以继承它。</p>
-<h4 id="NACK-interceptor的实现"><a href="#NACK-interceptor的实现" class="headerlink" title="NACK interceptor的实现"></a>NACK interceptor的实现</h4><p><code>GeneratorInterceptor</code> 是NACK interceptor对外提供的接口。</p>
+<h4 id="NACK-interceptor的实现"><a href="#NACK-interceptor的实现" class="headerlink" title="NACK interceptor的实现"></a>NACK interceptor的实现</h4><h5 id="GeneratorInterceptor-receiver的实现"><a href="#GeneratorInterceptor-receiver的实现" class="headerlink" title="GeneratorInterceptor receiver的实现"></a>GeneratorInterceptor receiver的实现</h5><p><code>GeneratorInterceptor</code> 是NACK interceptor对外提供的接收端接口。</p>
 <figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> GeneratorInterceptor <span class="keyword">struct</span> &#123;</span><br><span class="line">	interceptor.NoOp <span class="comment">// 继承interceptor</span></span><br><span class="line">	size      <span class="keyword">uint16</span> <span class="comment">// receiveLog参数</span></span><br><span class="line">	skipLastN <span class="keyword">uint16</span> <span class="comment">// receiveLog参数</span></span><br><span class="line">	interval  time.Duration <span class="comment">// 发送RTCP包间隔</span></span><br><span class="line">	m         sync.Mutex <span class="comment">// 这个结构体的锁</span></span><br><span class="line">	wg        sync.WaitGroup <span class="comment">// RTCP writer loop结束才可以关闭的控制</span></span><br><span class="line">	<span class="built_in">close</span>     <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125; <span class="comment">// 控制关闭</span></span><br><span class="line">	log       logging.LeveledLogger</span><br><span class="line"></span><br><span class="line">	receiveLogs   <span class="keyword">map</span>[<span class="keyword">uint32</span>]*receiveLog <span class="comment">// 记录了接收到的sequence number， key为SSRC</span></span><br><span class="line">	receiveLogsMu sync.Mutex <span class="comment">// receiveLog的map锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="状态控制"><a href="#状态控制" class="headerlink" title="状态控制"></a>状态控制</h5><p>实例化了interceptor的 <code>UnbindLocalStream</code>和<code>BindRemoteStream</code> 用于处理收到的RTP包， 在收到RTP包时将seq num记录在对应SSRC的receiveLog里。<br>实例化了interceptor的 <code>BindRTCPWriter</code> 用于反馈RTCP包，这里起了一个goroutine异步处理， 按定时器间隔来检查receiveLog。</p>
-<h5 id="receiveLog实现"><a href="#receiveLog实现" class="headerlink" title="receiveLog实现"></a>receiveLog实现</h5><p>receiveLog是interceptor里实现NACK的重要结构体，它记录了一段连续的包是否收到的情况。</p>
+<h6 id="状态控制"><a href="#状态控制" class="headerlink" title="状态控制"></a>状态控制</h6><p>实例化了interceptor的 <code>UnbindLocalStream</code>和<code>BindRemoteStream</code> 用于处理收到的RTP包， 在收到RTP包时将seq num记录在对应SSRC的receiveLog里。<br>实例化了interceptor的 <code>BindRTCPWriter</code> 用于反馈RTCP包，这里起了一个goroutine异步处理， 按定时器间隔来检查receiveLog。</p>
+<h6 id="receiveLog实现"><a href="#receiveLog实现" class="headerlink" title="receiveLog实现"></a>receiveLog实现</h6><p>receiveLog是interceptor里实现NACK的重要结构体，它记录了一段连续的包是否收到的情况。</p>
 <figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> receiveLog <span class="keyword">struct</span> &#123;</span><br><span class="line">	packets         []<span class="keyword">uint64</span> <span class="comment">// 记录RTP每个包是否收到的bitmap，使用uint64可标识64个包，因此size必须为64的整数倍</span></span><br><span class="line">	size            <span class="keyword">uint16</span> <span class="comment">// 可记录连续的RTP包的总数量</span></span><br><span class="line">	end             <span class="keyword">uint16</span> <span class="comment">// 记录收到的最后一个seq</span></span><br><span class="line">	started         <span class="keyword">bool</span> <span class="comment">// 第一个包，初始化上下文</span></span><br><span class="line">	lastConsecutive <span class="keyword">uint16</span> <span class="comment">// 记录收到的最后一个连续的seq，查找丢失包时，遍历它到end之间即可</span></span><br><span class="line">	m               sync.RWMutex <span class="comment">// 并发锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>使用uint64数组当bitmap，记录收到的RTP包，收到时将bit置1，删除时置0。</p>
@@ -303,7 +303,18 @@
 <figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *receiveLog)</span> <span class="title">fixLastConsecutive</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := s.lastConsecutive + <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> ; i != s.end+<span class="number">1</span> &amp;&amp; s.getReceived(i); i++ &#123;</span><br><span class="line">		<span class="comment">// find all consecutive packets</span></span><br><span class="line">	&#125;</span><br><span class="line">	s.lastConsecutive = i - <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>由于bitmap的size标识的是一段时间内需要重传的RTP包，每收到一个新的seq时，需要判断这段buffer是否翻转，并清空从end到seq之间的记录。</p>
-<h4 id="TWCC-interceptor的实现"><a href="#TWCC-interceptor的实现" class="headerlink" title="TWCC interceptor的实现"></a>TWCC interceptor的实现</h4><h4 id="SR-RR-interceptor的实现"><a href="#SR-RR-interceptor的实现" class="headerlink" title="SR/RR interceptor的实现"></a>SR/RR interceptor的实现</h4><h2 id="ion-sfu"><a href="#ion-sfu" class="headerlink" title="ion-sfu"></a>ion-sfu</h2><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
+<h6 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h6><p>算法简单，使用bitmap记录seq，节省内存空间并且查找高效。</p>
+<h6 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h6><p>定时器触发NACK请求，重传间隔受定时器间隔影响，实时性不高。<br>没有根据rtt评估是否需要请求重传，在乱序时导致误重传。<br>没有根据retries重试次数来做策略，可能会在网络拥塞严重时一直请求重传，进一步加大了网络拥塞程度。</p>
+<h5 id="ResponderInterceptor-sender的实现"><a href="#ResponderInterceptor-sender的实现" class="headerlink" title="ResponderInterceptor sender的实现"></a>ResponderInterceptor sender的实现</h5><p><code>ResponderInterceptor</code> 是NACK interceptor对外提供的发送端接口。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ResponderInterceptor <span class="keyword">struct</span> &#123;</span><br><span class="line">	interceptor.NoOp <span class="comment">// 继承interceptor</span></span><br><span class="line">	size          <span class="keyword">uint16</span> <span class="comment">// sendBuffer缓存包的数量</span></span><br><span class="line">	log           logging.LeveledLogger</span><br><span class="line">	packetFactory packetFactory <span class="comment">// 提供可定制化packet管理接口，也有默认的packetManager</span></span><br><span class="line"></span><br><span class="line">	streams   <span class="keyword">map</span>[<span class="keyword">uint32</span>]*localStream <span class="comment">// 缓存每个SSRC的包队列</span></span><br><span class="line">	streamsMu sync.Mutex <span class="comment">// streams的map锁</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> localStream <span class="keyword">struct</span> &#123;</span><br><span class="line">	sendBuffer *sendBuffer <span class="comment">// 发送缓存</span></span><br><span class="line">	rtpWriter  interceptor.RTPWriter <span class="comment">// 注册用于发送重传包的回调函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缓存每个SSRC的发送包，并且注册一个回调函数，用于发送重传包。<br>当收到RTCP NACK请求时，在缓存中查找需要重传的包，并发送给对方。</p>
+<h6 id="sendBuffer实现"><a href="#sendBuffer实现" class="headerlink" title="sendBuffer实现"></a>sendBuffer实现</h6><p><code>sendBuffer</code>是发送端缓存，存储最近发送的包，参数<code>size</code>指定缓存的大小。size只能为2的幂次方倍。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> sendBuffer <span class="keyword">struct</span> &#123;</span><br><span class="line">	packets   []*retainablePacket</span><br><span class="line">	size      <span class="keyword">uint16</span></span><br><span class="line">	lastAdded <span class="keyword">uint16</span></span><br><span class="line">	started   <span class="keyword">bool</span></span><br><span class="line"></span><br><span class="line">	m sync.RWMutex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id=""><a href="#" class="headerlink" title=""></a></h6><h4 id="TWCC-interceptor的实现"><a href="#TWCC-interceptor的实现" class="headerlink" title="TWCC interceptor的实现"></a>TWCC interceptor的实现</h4><h4 id="SR-RR-interceptor的实现"><a href="#SR-RR-interceptor的实现" class="headerlink" title="SR/RR interceptor的实现"></a>SR/RR interceptor的实现</h4><h2 id="ion-sfu"><a href="#ion-sfu" class="headerlink" title="ion-sfu"></a>ion-sfu</h2><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
 <p>通过设置环境变量改变pion log的日志级别，例如： export PION_LOG_TRACE=all </p>
 </blockquote>
 
@@ -356,7 +367,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -468,7 +479,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -580,7 +591,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -662,12 +673,12 @@
 </ul>
 <p><img src="/images/pic/HLS.png" alt="HLS"></p>
 <h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>在实时传输中，一般使用UDP协议，因此需要对抗丢包，乱序，抖动等质量问题。在实时和可靠之间做权衡，一切都是trade-off。</p>
-<h3 id="NACK"><a href="#NACK" class="headerlink" title="NACK"></a>NACK</h3><p>目标： 既要做到及时快速的重传，又要避免过多过久的重传，减少带宽的使用。</p>
+<h3 id="NACK"><a href="#NACK" class="headerlink" title="NACK"></a>NACK</h3><h4 id="NACK-receiver"><a href="#NACK-receiver" class="headerlink" title="NACK receiver"></a>NACK receiver</h4><p>目标： 既要做到及时快速的重传，又要避免过多过久的重传，减少带宽的使用。</p>
 <p>思路1： 收到包时记录seq，定时检查最近1000个包里丢失了哪些，发送RTCP NACK请求。<br>问题：定时器间隔导致丢包不能快速请求。</p>
 <p>思路2： 思路1+每次收到包都触发一次快速请求重传。<br>问题：乱序时误重传，浪费带宽。</p>
 <p>思路3： 思路2+为避免即时和定时频繁发送NACK请求的问题，根据rtt推算是否在定时器触发时需要再次请求NACK，并记录包的重传次数，超过一定次数则停止再发重传请求。</p>
 <p>弱网环境下的补充：若重传队列过长，可清理至上一个keyframe处的seq。若队列还是过长，可直接清空重传队列，并发送RTCP PLI请求。</p>
-
+<h4 id="NACK-sender"><a href="#NACK-sender" class="headerlink" title="NACK sender"></a>NACK sender</h4>
       
     </div>
 
@@ -717,7 +728,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -793,7 +804,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -867,7 +878,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1009,7 +1020,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1225,7 +1236,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-06-23 21:19:29" itemprop="dateModified" datetime="2022-06-23T21:19:29+08:00">2022-06-23</time>
+                <time title="修改时间：2022-06-24 19:41:53" itemprop="dateModified" datetime="2022-06-24T19:41:53+08:00">2022-06-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">

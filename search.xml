@@ -248,87 +248,6 @@
       </categories>
   </entry>
   <entry>
-    <title>MySQL</title>
-    <url>/2020/05/26/2020-05-27-mysql/</url>
-    <content><![CDATA[<p><a href="/images/svg/MySQL.svg">outline</a><br><img src="/images/svg/MySQL.svg"></p>
-]]></content>
-      <categories>
-        <category>database</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>RTC</title>
-    <url>/2020/10/03/2020-10-04-rtc/</url>
-    <content><![CDATA[<h1 id="RTC"><a href="#RTC" class="headerlink" title="RTC"></a>RTC</h1><h2 id="RTC-Server"><a href="#RTC-Server" class="headerlink" title="RTC Server"></a>RTC Server</h2><h3 id="流媒体服务器"><a href="#流媒体服务器" class="headerlink" title="流媒体服务器"></a>流媒体服务器</h3><p>媒体数据的传输，实现实时传输的最基本功能。</p>
-<h3 id="信令服务器"><a href="#信令服务器" class="headerlink" title="信令服务器"></a>信令服务器</h3><p>管理多路用户的逻辑，将多个通信用户组建房间进行权限控制和资源管理。</p>
-<h3 id="打洞服务器"><a href="#打洞服务器" class="headerlink" title="打洞服务器"></a>打洞服务器</h3><p>为媒体传输提供更丰富的传输通道。</p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><strong>CDN</strong></p>
-<p>提供就近接入和媒体缓存。</p>
-<p><strong>专线</strong></p>
-<p>复杂网络情况中提升各运营商之间传输质量。</p>
-<p><img src="/images/pic/RTC.png" alt="RTC"></p>
-<h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>NAT解决了IPv4资源不足问题，将端口和IP隐藏在内网，从而提高安全性</p>
-<ol>
-<li>完全锥型</li>
-<li>IP限制型</li>
-<li>端口限制型</li>
-<li>对称型</li>
-</ol>
-<p><img src="/images/pic/STUN.png" alt="STUN"></p>
-<p>组网的网关就像一道墙，阻隔着外部host和内网host直接访问。身处两个NAT后面的host不得不借助于打洞服务器来探测和协助两个host相互访问。因此，以上4种类型的组合情况有12种。</p>
-<p><strong>完全锥形</strong>比较容易理解，就是一个四元组：</p>
-<pre><code> &#123;
-   内网IP，
-   内网端口，
-   映射的外网IP，
-   映射的外网端口
- &#125;
- 
-</code></pre>
-<p>这个映射四元组就是墙上的“洞”，NAT通过查找这个映射表来转发数据。完全锥形没有任何限制，内网的任何host都可以通过这个“洞”和外界通信。</p>
-<p><strong>IP限制型</strong>，多加了一个元组：</p>
-<blockquote>
-<p>被访问主机的IP</p>
-</blockquote>
-<p>即限制了内网其他IP的host不能通过这个洞。</p>
-<p><strong>端口限制型</strong>，又多加了一个元组：</p>
-<blockquote>
-<p>被访问主机的端口</p>
-</blockquote>
-<p>即限制了内网同个host的其他端口不能通过这个洞。</p>
-<p>最复杂和多变的对称型，对于同一个外网host访问内网host1和host2，它映射的IP和端口都是变化的，因此：<code>对称型—对称型</code>和<code>对称型—端口限制型</code>这两种情况在STUN中是无法穿越的。</p>
-<p>NAT穿越为媒体传输通道提供了直连的选择，同一局域网应该首选直连通道。其他情况可根据业务需求和质量情况来判断选择哪种通道。</p>
-<h2 id="多对多通信"><a href="#多对多通信" class="headerlink" title="多对多通信"></a>多对多通信</h2><h3 id="Mesh方案"><a href="#Mesh方案" class="headerlink" title="Mesh方案"></a>Mesh方案</h3><p>思想基于一对一方案，将每个host之间都建立一个连接，且每个host之间都能打通直连通道。</p>
-<p>局限性：</p>
-<ol>
-<li>现实场景中，不一定每个host之间都能建立直连通道</li>
-<li>共享媒体流的时候，将给每个对端发送一份数据，上行带宽很大</li>
-</ol>
-<h3 id="MCU方案"><a href="#MCU方案" class="headerlink" title="MCU方案"></a>MCU方案</h3><p><strong>Multipoint Conferencing Unit</strong></p>
-<p>服务器进行多路混流和重新编码，视频会议场景等，对服务器硬件要求高。<br>优势很明显，场景体验好，节省带宽资源。<br>局限性也很明显，对服务器要求高，混流过程有一定的延时。</p>
-<h3 id="SFU方案"><a href="#SFU方案" class="headerlink" title="SFU方案"></a>SFU方案</h3><p><strong>Selective Forwarding Unit</strong></p>
-<p>服务器对多路流根据实际场景进行转发。</p>
-<h3 id="传输质量"><a href="#传输质量" class="headerlink" title="传输质量"></a>传输质量</h3><p><img src="/images/pic/QoS.png" alt="QoS"></p>
-<h3 id="流媒体传输协议"><a href="#流媒体传输协议" class="headerlink" title="流媒体传输协议"></a>流媒体传输协议</h3><p>传统直播推拉流架构的主要协议：HLS和RTMP协议。</p>
-<p>由于WebRTC传输数据基于UDP协议，RTMP基于TCP协议，HLS基于HTTP协议的特点，传输实时性：<code>WebRTC(RTCP/RTP) &gt; RTMP &gt; HLS</code></p>
-<ul>
-<li>WebRTC多用于实时音视频通信或互动场景</li>
-<li>RTMP多用于推拉流场景</li>
-<li>HLS多用于拉流端和点播场景</li>
-</ul>
-<p><img src="/images/pic/HLS.png" alt="HLS"></p>
-<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>在实时传输中，一般使用UDP协议，因此需要对抗丢包，乱序，抖动等质量问题。在实时和可靠之间做权衡，一切都是trade-off。</p>
-<h3 id="NACK"><a href="#NACK" class="headerlink" title="NACK"></a>NACK</h3><p>目标： 既要做到及时快速的重传，又要避免过多过久的重传，减少带宽的使用。</p>
-<p>思路1： 收到包时记录seq，定时检查最近1000个包里丢失了哪些，发送RTCP NACK请求。<br>问题：定时器间隔导致丢包不能快速请求。</p>
-<p>思路2： 思路1+每次收到包都触发一次快速请求重传。<br>问题：乱序时误重传，浪费带宽。</p>
-<p>思路3： 思路2+为避免即时和定时频繁发送NACK请求的问题，根据rtt推算是否在定时器触发时需要再次请求NACK，并记录包的重传次数，超过一定次数则停止再发重传请求。</p>
-<p>弱网环境下的补充：若重传队列过长，可清理至上一个keyframe处的seq。若队列还是过长，可直接清空重传队列，并发送RTCP PLI请求。</p>
-]]></content>
-      <categories>
-        <category>media</category>
-      </categories>
-  </entry>
-  <entry>
     <title>WebSocket</title>
     <url>/2020/03/06/2020-03-07-websocket/</url>
     <content><![CDATA[<h3 id="全双工协议"><a href="#全双工协议" class="headerlink" title="全双工协议"></a>全双工协议</h3><p>简而言之，许多应用场景需要全双工的web应用，例如：服务器主动推送和实时交互的应用。这些应用不适合在HTTP协议上实现。最好的方式是使用HTTP建立握手，之后基于TCP做长连接。</p>
@@ -406,50 +325,84 @@
       </categories>
   </entry>
   <entry>
-    <title>HttpLongPolling</title>
-    <url>/2021/05/08/2021-05-09-http-long-polling/</url>
-    <content><![CDATA[<h3 id="HTTP推送技术-Push-technology"><a href="#HTTP推送技术-Push-technology" class="headerlink" title="HTTP推送技术 Push technology"></a>HTTP推送技术 Push technology</h3><p>传统的HTTP请求都是client主动发起到server的请求，若server有通知需要即时通知client时，需要推送技术。</p>
-<h4 id="常规轮询-Regular-Polling"><a href="#常规轮询-Regular-Polling" class="headerlink" title="常规轮询 Regular Polling"></a>常规轮询 Regular Polling</h4><p>每隔一段时间pull/get消息。</p>
-<ul>
-<li>没有消息时浪费资源。</li>
-<li>有消息时不能即时推送。</li>
-</ul>
-<h4 id="长轮询-Long-Polling"><a href="#长轮询-Long-Polling" class="headerlink" title="长轮询 Long Polling"></a>长轮询 Long Polling</h4><ol>
-<li><p>请求</p>
-<p>client发起请求并把keepalive时间设的较长，服务器收到消息并不立即返回，而是hold一段时间。</p>
-</li>
-<li><p>响应</p>
-<p>当有消息推送时，server立即返回消息。或server的connection hang timeout时，返回消息。server返回消息后，将连接关闭。</p>
-</li>
-<li><p>循环</p>
-<p> client收到response后，应立即再次发起请求。</p>
-</li>
-</ol>
-<h3 id="Long-Polling-vs-Websocket"><a href="#Long-Polling-vs-Websocket" class="headerlink" title="Long Polling vs Websocket"></a>Long Polling vs Websocket</h3><p>Long Polling并不是一种全新的协议，而是基于XMLHttpRequest实现了一种推送机制。最大的优点是过渡期的兼容性好，client无需新增协议，容易适配。<br>同个client若发起多个request连接，消息只返回一次，应通过本地缓存共享推送消息。</p>
-<p>websocket协议相对较晚出现，需要client和server端都支持websocket协议，尽管它的握手还是基于HTTP协议，但它在HTTP协议上实现了全双工通信。</p>
-<p>websocket几乎解决了Long Polling的所有缺点，只是被断开后不能自恢复。</p>
-<h3 id="Apollo在Long-polling的实践"><a href="#Apollo在Long-polling的实践" class="headerlink" title="Apollo在Long polling的实践"></a>Apollo在Long polling的实践</h3><p>Apollo是携程开源的配置中心，提供了带缓存和不带缓存的pull接口，和long polling即时变更推送接口。</p>
-<p>为了避免long polling机制的缺陷，使用了版本号等方案。</p>
-<ul>
-<li><p>Long polling获取的消息时，需要带上本地缓存的notificationId，server端判断client带过来的notificationId是否为最新，若需要更新则立即返回消息，否则等配置有更新才会返回，返回消息携带notificationId，client端更新缓存。这样做的好处是，即使中间断开连接，恢复连接后也可以对比本地是否需要更新配置信息。</p>
-</li>
-<li><p>client使用pull接口获取配置时，可填参数IP表示client的唯一Id，当需要灰度推送时，根据client携带的IP判断是否给它灰度配置。这样做的好处是，使用逻辑上的Id（IP），相同IP的client可以获取到相同的配置。</p>
-</li>
-<li><p>client使用pull接口获取配置时，可填参数releaseKey。Apollo每次发布配置时，会为新版本的配置生成releaseKey，使用常规轮询时server端无需每次都查表，可根据releaseKey判断是否需要读取配置。client也无需每次都更新本地缓存的配置。</p>
-</li>
-</ul>
-<img src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgaGVpZ2h0PSI1ODRweCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgc3R5bGU9IndpZHRoOjY4MnB4O2hlaWdodDo1ODRweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA2ODIgNTg0IiB3aWR0aD0iNjgycHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzLz48Zz48ZWxsaXBzZSBjeD0iNDExLjM3NSIgY3k9IjIwIiBmaWxsPSIjMjIyMjIyIiByeD0iMTAiIHJ5PSIxMCIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iI0YxRjFGMSIgcG9pbnRzPSIzMjEuODc1LDEwMy45Njg4LDUwMC44NzUsMTAzLjk2ODgsNTEyLjg3NSwxMTUuOTY4OCw1MDAuODc1LDEyNy45Njg4LDMyMS44NzUsMTI3Ljk2ODgsMzA5Ljg3NSwxMTUuOTY4OCwzMjEuODc1LDEwMy45Njg4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNzkiIHg9IjMyMS44NzUiIHk9IjExOS43NzY5Ij5BcG9sbG8gY29uZmlnIG5vcm1hbCByZXNwb25zZT88L3RleHQ+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEiIHg9IjI4OC44NzUiIHk9IjExMy4zNzQ1Ij55ZXM8L3RleHQ+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQiIHg9IjUxMi44NzUiIHk9IjExMy4zNzQ1Ij5ubzwvdGV4dD48cG9seWdvbiBmaWxsPSIjRjFGMUYxIiBwb2ludHM9IjIwOC4yNSwxMzcuOTY4OCwzMDYuMjUsMTM3Ljk2ODgsMzE4LjI1LDE0OS45Njg4LDMwNi4yNSwxNjEuOTY4OCwyMDguMjUsMTYxLjk2ODgsMTk2LjI1LDE0OS45Njg4LDIwOC4yNSwxMzcuOTY4OCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iOTgiIHg9IjIwOC4yNSIgeT0iMTUzLjc3NjkiPmh0dHAgc3RhdHVzIGNvZGU/PC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNDYiIHg9IjEwNC41IiB5PSIxOTcuNTc4MSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEyMiIgeD0iMTE4LjUiIHk9IjIxOC43MTY4Ij51cGRhdGUgbm90aWZpY2F0aW9uSWQ8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0YxRjFGMSIgcG9pbnRzPSIxMDcsMjUxLjU0NjksMjQ4LDI1MS41NDY5LDI2MCwyNjMuNTQ2OSwyNDgsMjc1LjU0NjksMTA3LDI3NS41NDY5LDk1LDI2My41NDY5LDEwNywyNTEuNTQ2OSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQxIiB4PSIxMDciIHk9IjI2Ny4zNTUiPkhUVFAgZ2V0IGNvbmZpZyBuZXdlc3Q/PC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxMzgiIHg9IjExIiB5PSIzMTguMzUxNiIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjExNCIgeD0iMjUiIHk9IjMzOS40OTAyIj51cGRhdGUgbG9jYWwgY2FjaGU8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg3IiB4PSIyMzEuNSIgeT0iMzE4LjM1MTYiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI2MyIgeD0iMjQ1LjUiIHk9IjMzOS40OTAyIj5ubyBjaGFuZ2U8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0YxRjFGMSIgcG9pbnRzPSIxNzcuNSwzOTkuMjQyMiwxNzcuNSwzOTkuMjQyMiwxODkuNSw0MTEuMjQyMiwxNzcuNSw0MjMuMjQyMiwxNzcuNSw0MjMuMjQyMiwxNjUuNSw0MTEuMjQyMiwxNzcuNSwzOTkuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg3IiB4PSIzMzguNSIgeT0iMTk3LjU3ODEiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI2MyIgeD0iMzUyLjUiIHk9IjIxOC43MTY4Ij5ubyBjaGFuZ2U8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjU2IiB4PSI0NDUuNSIgeT0iMTk3LjU3ODEiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzMiIgeD0iNDU5LjUiIHk9IjIxOC43MTY4Ij5vdGhlcjwvdGV4dD48cG9seWdvbiBmaWxsPSIjRjFGMUYxIiBwb2ludHM9IjI1Ny4yNSw0MzMuMjQyMiwyNTcuMjUsNDMzLjI0MjIsMjY5LjI1LDQ0NS4yNDIyLDI1Ny4yNSw0NTcuMjQyMiwyNTcuMjUsNDU3LjI0MjIsMjQ1LjI1LDQ0NS4yNDIyLDI1Ny4yNSw0MzMuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg0IiB4PSI1MjMuNSIgeT0iMTM3Ljk2ODgiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI2MCIgeD0iNTM3LjUiIHk9IjE1OS4xMDc0Ij5IdHRwIGVycm9yPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGMUYxRjEiIHBvaW50cz0iNDExLjM3NSw0NjMuMjQyMiw0MjMuMzc1LDQ3NS4yNDIyLDQxMS4zNzUsNDg3LjI0MjIsMzk5LjM3NSw0NzUuMjQyMiw0MTEuMzc1LDQ2My4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiLz48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iODciIHg9IjM2Ny44NzUiIHk9IjUwIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNjciIHg9IjM3Ny44NzUiIHk9IjcxLjEzODciPkxvbmdQb2xsaW5nPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGMUYxRjEiIHBvaW50cz0iNDExLjM3NSw1MDcuMjQyMiw0MTEuMzc1LDUwNy4yNDIyLDQyMy4zNzUsNTE5LjI0MjIsNDExLjM3NSw1MzEuMjQyMiw0MTEuMzc1LDUzMS4yNDIyLDM5OS4zNzUsNTE5LjI0MjIsNDExLjM3NSw1MDcuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjU0IiB4PSI2MTcuNSIgeT0iMzQ1LjI3MzQiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzNCIgeD0iNjI3LjUiIHk9IjM2Ni40MTIxIj5zbGVlcDwvdGV4dD48ZWxsaXBzZSBjeD0iNDExLjM3NSIgY3k9IjU2Mi4yNDIyIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxLjA7ZmlsbDpub25lOyIvPjxlbGxpcHNlIGN4PSI0MTEuMzc1IiBjeT0iNTYyLjI0MjIiIGZpbGw9IiMyMjIyMjIiIHJ4PSI2IiByeT0iNiIgc3R5bGU9InN0cm9rZTojMTExMTExO3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iOTUiIHgyPSI4MCIgeTE9IjI2My41NDY5IiB5Mj0iMjYzLjU0NjkiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI4MCIgeDI9IjgwIiB5MT0iMjYzLjU0NjkiIHkyPSIzMTguMzUxNiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNzYsMzA4LjM1MTYsODAsMzE4LjM1MTYsODQsMzA4LjM1MTYsODAsMzEyLjM1MTYiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjIxIiB4PSI4MCIgeT0iMjk2Ljg1MTYiPjIwMDwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIyNjAiIHgyPSIyNzUiIHkxPSIyNjMuNTQ2OSIgeTI9IjI2My41NDY5Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjc1IiB4Mj0iMjc1IiB5MT0iMjYzLjU0NjkiIHkyPSIzMTguMzUxNiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjcxLDMwOC4zNTE2LDI3NSwzMTguMzUxNiwyNzksMzA4LjM1MTYsMjc1LDMxMi4zNTE2IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIyMSIgeD0iMjc1IiB5PSIyOTYuODUxNiI+MzA0PC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjgwIiB4Mj0iODAiIHkxPSIzNTIuMzIwMyIgeTI9IjQxMS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iODAiIHgyPSIxNjUuNSIgeTE9IjQxMS4yNDIyIiB5Mj0iNDExLjI0MjIiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE1NS41LDQwNy4yNDIyLDE2NS41LDQxMS4yNDIyLDE1NS41LDQxNS4yNDIyLDE1OS41LDQxMS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIyNzUiIHgyPSIyNzUiIHkxPSIzNTIuMzIwMyIgeTI9IjQxMS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjc1IiB4Mj0iMTg5LjUiIHkxPSI0MTEuMjQyMiIgeTI9IjQxMS4yNDIyIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxOTkuNSw0MDcuMjQyMiwxODkuNSw0MTEuMjQyMiwxOTkuNSw0MTUuMjQyMiwxOTUuNSw0MTEuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMTc3LjUiIHgyPSIxNzcuNSIgeTE9IjIzMS41NDY5IiB5Mj0iMjUxLjU0NjkiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE3My41LDI0MS41NDY5LDE3Ny41LDI1MS41NDY5LDE4MS41LDI0MS41NDY5LDE3Ny41LDI0NS41NDY5IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIxOTYuMjUiIHgyPSIxNzcuNSIgeTE9IjE0OS45Njg4IiB5Mj0iMTQ5Ljk2ODgiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIxNzcuNSIgeDI9IjE3Ny41IiB5MT0iMTQ5Ljk2ODgiIHkyPSIxOTcuNTc4MSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTczLjUsMTg3LjU3ODEsMTc3LjUsMTk3LjU3ODEsMTgxLjUsMTg3LjU3ODEsMTc3LjUsMTkxLjU3ODEiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjIxIiB4PSIxNzcuNSIgeT0iMTc3LjU4MTUiPjIwMDwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIzMTguMjUiIHgyPSI0NzMuNSIgeTE9IjE0OS45Njg4IiB5Mj0iMTQ5Ljk2ODgiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI0NzMuNSIgeDI9IjQ3My41IiB5MT0iMTQ5Ljk2ODgiIHkyPSIxOTcuNTc4MSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDY5LjUsMTg3LjU3ODEsNDczLjUsMTk3LjU3ODEsNDc3LjUsMTg3LjU3ODEsNDczLjUsMTkxLjU3ODEiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjMwIiB4PSI0NzMuNSIgeT0iMTc3LjU4MTUiPm90aGVyPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjM4MiIgeDI9IjM4MiIgeTE9IjE0OS45Njg4IiB5Mj0iMTk3LjU3ODEiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjM3OCwxODcuNTc4MSwzODIsMTk3LjU3ODEsMzg2LDE4Ny41NzgxLDM4MiwxOTEuNTc4MSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEiIHg9IjM4MiIgeT0iMTcyLjU4MTUiPjMwNDwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIxNzcuNSIgeDI9IjE3Ny41IiB5MT0iNDIzLjI0MjIiIHkyPSI0NDUuMjQyMiIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjE3Ny41IiB4Mj0iMjQ1LjI1IiB5MT0iNDQ1LjI0MjIiIHkyPSI0NDUuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjM1LjI1LDQ0MS4yNDIyLDI0NS4yNSw0NDUuMjQyMiwyMzUuMjUsNDQ5LjI0MjIsMjM5LjI1LDQ0NS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI0NzMuNSIgeDI9IjQ3My41IiB5MT0iMjMxLjU0NjkiIHkyPSI0NDUuMjQyMiIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjQ3My41IiB4Mj0iMjY5LjI1IiB5MT0iNDQ1LjI0MjIiIHkyPSI0NDUuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjc5LjI1LDQ0MS4yNDIyLDI2OS4yNSw0NDUuMjQyMiwyNzkuMjUsNDQ5LjI0MjIsMjc1LjI1LDQ0NS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIzODIiIHgyPSIzODIiIHkxPSIyMzEuNTQ2OSIgeTI9IjQ0NS4yNDIyIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIzNzgsNDM1LjI0MjIsMzgyLDQ0NS4yNDIyLDM4Niw0MzUuMjQyMiwzODIsNDM5LjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjMwOS44NzUiIHgyPSIyNTcuMjUiIHkxPSIxMTUuOTY4OCIgeTI9IjExNS45Njg4Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjU3LjI1IiB4Mj0iMjU3LjI1IiB5MT0iMTE1Ljk2ODgiIHkyPSIxMzcuOTY4OCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjUzLjI1LDEyNy45Njg4LDI1Ny4yNSwxMzcuOTY4OCwyNjEuMjUsMTI3Ljk2ODgsMjU3LjI1LDEzMS45Njg4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI1MTIuODc1IiB4Mj0iNTY1LjUiIHkxPSIxMTUuOTY4OCIgeTI9IjExNS45Njg4Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNTY1LjUiIHgyPSI1NjUuNSIgeTE9IjExNS45Njg4IiB5Mj0iMTM3Ljk2ODgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjU2MS41LDEyNy45Njg4LDU2NS41LDEzNy45Njg4LDU2OS41LDEyNy45Njg4LDU2NS41LDEzMS45Njg4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIyNTcuMjUiIHgyPSIyNTcuMjUiIHkxPSI0NTcuMjQyMiIgeTI9IjQ3NS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjU3LjI1IiB4Mj0iMzk5LjM3NSIgeTE9IjQ3NS4yNDIyIiB5Mj0iNDc1LjI0MjIiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjM4OS4zNzUsNDcxLjI0MjIsMzk5LjM3NSw0NzUuMjQyMiwzODkuMzc1LDQ3OS4yNDIyLDM5My4zNzUsNDc1LjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjU2NS41IiB4Mj0iNTY1LjUiIHkxPSIxNzEuOTM3NSIgeTI9IjQ3NS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNTY1LjUiIHgyPSI0MjMuMzc1IiB5MT0iNDc1LjI0MjIiIHkyPSI0NzUuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDMzLjM3NSw0NzEuMjQyMiw0MjMuMzc1LDQ3NS4yNDIyLDQzMy4zNzUsNDc5LjI0MjIsNDI5LjM3NSw0NzUuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNDExLjM3NSIgeDI9IjQxMS4zNzUiIHkxPSI4My45Njg4IiB5Mj0iMTAzLjk2ODgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjQwNy4zNzUsOTMuOTY4OCw0MTEuMzc1LDEwMy45Njg4LDQxNS4zNzUsOTMuOTY4OCw0MTEuMzc1LDk3Ljk2ODgiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjQyMy4zNzUiIHgyPSI2NDQuNSIgeTE9IjUxOS4yNDIyIiB5Mj0iNTE5LjI0MjIiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI2NDQuNSIgeDI9IjY0NC41IiB5MT0iMzc5LjI0MjIiIHkyPSI1MTkuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNjQwLjUsMzg5LjI0MjIsNjQ0LjUsMzc5LjI0MjIsNjQ4LjUsMzg5LjI0MjIsNjQ0LjUsMzg1LjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjY0NC41IiB4Mj0iNjQ0LjUiIHkxPSI2Ni45ODQ0IiB5Mj0iMzQ1LjI3MzQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI2NDQuNSIgeDI9IjQ1NC44NzUiIHkxPSI2Ni45ODQ0IiB5Mj0iNjYuOTg0NCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDY0Ljg3NSw2Mi45ODQ0LDQ1NC44NzUsNjYuOTg0NCw0NjQuODc1LDcwLjk4NDQsNDYwLjg3NSw2Ni45ODQ0IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI0MTEuMzc1IiB4Mj0iNDExLjM3NSIgeTE9IjQ4Ny4yNDIyIiB5Mj0iNTA3LjI0MjIiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjQwNy4zNzUsNDk3LjI0MjIsNDExLjM3NSw1MDcuMjQyMiw0MTUuMzc1LDQ5Ny4yNDIyLDQxMS4zNzUsNTAxLjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjQxMS4zNzUiIHgyPSI0MTEuMzc1IiB5MT0iMzAiIHkyPSI1MCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDA3LjM3NSw0MCw0MTEuMzc1LDUwLDQxNS4zNzUsNDAsNDExLjM3NSw0NCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNDExLjM3NSIgeDI9IjQxMS4zNzUiIHkxPSI1MzEuMjQyMiIgeTI9IjU1MS4yNDIyIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI0MDcuMzc1LDU0MS4yNDIyLDQxMS4zNzUsNTUxLjI0MjIsNDE1LjM3NSw1NDEuMjQyMiw0MTEuMzc1LDU0NS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48IS0tTUQ1PVsxMmFmNGQ0YTcwOWUxMmY3NzhlNWUxZGEyODFlYzZmM10KQHN0YXJ0dW1sDQpzdGFydCANCg0KcmVwZWF0IDpMb25nUG9sbGluZzsNCmlmIChBcG9sbG8gY29uZmlnIG5vcm1hbCByZXNwb25zZT8pIHRoZW4gKHllcykNCiAgICBzd2l0Y2ggKGh0dHAgc3RhdHVzIGNvZGU/KSANCiAgICBjYXNlICgyMDApDQogICAgICAgIDogdXBkYXRlIG5vdGlmaWNhdGlvbklkOw0KICAgICAgICBzd2l0Y2ggKEhUVFAgZ2V0IGNvbmZpZyBuZXdlc3Q/KQ0KICAgICAgICAgICAgY2FzZSAoMjAwKQ0KICAgICAgICAgICAgICAgIDogdXBkYXRlIGxvY2FsIGNhY2hlOw0KICAgICAgICAgICAgY2FzZSAoMzA0KQ0KICAgICAgICAgICAgICAgIDogbm8gY2hhbmdlOw0KICAgICAgICBlbmRzd2l0Y2gNCiAgICBjYXNlICgzMDQpDQogICAgICAgIDogbm8gY2hhbmdlOw0KICAgIGNhc2UgKG90aGVyKQ0KICAgICAgICA6IG90aGVyOw0KICAgIGVuZHN3aXRjaA0KZWxzZSAobm8pDQogICAgOiBIdHRwIGVycm9yOw0KZW5kaWYNCg0KYmFja3dhcmQgOnNsZWVwOw0KcmVwZWF0IHdoaWxlICgpDQpzdG9wDQpAZW5kdW1sDQoKUGxhbnRVTUwgdmVyc2lvbiAxLjIwMjIuN2JldGExKFVua25vd24gY29tcGlsZSB0aW1lKQooR1BMIHNvdXJjZSBkaXN0cmlidXRpb24pCkphdmEgUnVudGltZTogSmF2YShUTSkgU0UgUnVudGltZSBFbnZpcm9ubWVudApKVk06IEphdmEgSG90U3BvdChUTSkgNjQtQml0IFNlcnZlciBWTQpEZWZhdWx0IEVuY29kaW5nOiBVVEYtOApMYW5ndWFnZTogZW4KQ291bnRyeTogVVMKLS0+PC9nPjwvc3ZnPg=='>
-
-<ul>
-<li><p>流程图不需要考虑很严谨的逻辑，因为有版本号，即使中间有异常，下次轮询的时候也可以恢复。</p>
-</li>
-<li><p>做好降级策略，定期轮询，防止路由策略等导致的long polling服务不可用。</p>
-</li>
-</ul>
-<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://ably.com/blog/websockets-vs-long-polling">https://ably.com/blog/websockets-vs-long-polling</a></p>
+    <title>MySQL</title>
+    <url>/2020/05/26/2020-05-27-mysql/</url>
+    <content><![CDATA[<p><a href="/images/svg/MySQL.svg">outline</a><br><img src="/images/svg/MySQL.svg"></p>
 ]]></content>
       <categories>
-        <category>protocol</category>
+        <category>database</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>RTC</title>
+    <url>/2020/10/03/2020-10-04-rtc/</url>
+    <content><![CDATA[<h1 id="RTC"><a href="#RTC" class="headerlink" title="RTC"></a>RTC</h1><h2 id="RTC-Server"><a href="#RTC-Server" class="headerlink" title="RTC Server"></a>RTC Server</h2><h3 id="流媒体服务器"><a href="#流媒体服务器" class="headerlink" title="流媒体服务器"></a>流媒体服务器</h3><p>媒体数据的传输，实现实时传输的最基本功能。</p>
+<h3 id="信令服务器"><a href="#信令服务器" class="headerlink" title="信令服务器"></a>信令服务器</h3><p>管理多路用户的逻辑，将多个通信用户组建房间进行权限控制和资源管理。</p>
+<h3 id="打洞服务器"><a href="#打洞服务器" class="headerlink" title="打洞服务器"></a>打洞服务器</h3><p>为媒体传输提供更丰富的传输通道。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p><strong>CDN</strong></p>
+<p>提供就近接入和媒体缓存。</p>
+<p><strong>专线</strong></p>
+<p>复杂网络情况中提升各运营商之间传输质量。</p>
+<p><img src="/images/pic/RTC.png" alt="RTC"></p>
+<h2 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h2><p>NAT解决了IPv4资源不足问题，将端口和IP隐藏在内网，从而提高安全性</p>
+<ol>
+<li>完全锥型</li>
+<li>IP限制型</li>
+<li>端口限制型</li>
+<li>对称型</li>
+</ol>
+<p><img src="/images/pic/STUN.png" alt="STUN"></p>
+<p>组网的网关就像一道墙，阻隔着外部host和内网host直接访问。身处两个NAT后面的host不得不借助于打洞服务器来探测和协助两个host相互访问。因此，以上4种类型的组合情况有12种。</p>
+<p><strong>完全锥形</strong>比较容易理解，就是一个四元组：</p>
+<pre><code> &#123;
+   内网IP，
+   内网端口，
+   映射的外网IP，
+   映射的外网端口
+ &#125;
+ 
+</code></pre>
+<p>这个映射四元组就是墙上的“洞”，NAT通过查找这个映射表来转发数据。完全锥形没有任何限制，内网的任何host都可以通过这个“洞”和外界通信。</p>
+<p><strong>IP限制型</strong>，多加了一个元组：</p>
+<blockquote>
+<p>被访问主机的IP</p>
+</blockquote>
+<p>即限制了内网其他IP的host不能通过这个洞。</p>
+<p><strong>端口限制型</strong>，又多加了一个元组：</p>
+<blockquote>
+<p>被访问主机的端口</p>
+</blockquote>
+<p>即限制了内网同个host的其他端口不能通过这个洞。</p>
+<p>最复杂和多变的对称型，对于同一个外网host访问内网host1和host2，它映射的IP和端口都是变化的，因此：<code>对称型—对称型</code>和<code>对称型—端口限制型</code>这两种情况在STUN中是无法穿越的。</p>
+<p>NAT穿越为媒体传输通道提供了直连的选择，同一局域网应该首选直连通道。其他情况可根据业务需求和质量情况来判断选择哪种通道。</p>
+<h2 id="多对多通信"><a href="#多对多通信" class="headerlink" title="多对多通信"></a>多对多通信</h2><h3 id="Mesh方案"><a href="#Mesh方案" class="headerlink" title="Mesh方案"></a>Mesh方案</h3><p>思想基于一对一方案，将每个host之间都建立一个连接，且每个host之间都能打通直连通道。</p>
+<p>局限性：</p>
+<ol>
+<li>现实场景中，不一定每个host之间都能建立直连通道</li>
+<li>共享媒体流的时候，将给每个对端发送一份数据，上行带宽很大</li>
+</ol>
+<h3 id="MCU方案"><a href="#MCU方案" class="headerlink" title="MCU方案"></a>MCU方案</h3><p><strong>Multipoint Conferencing Unit</strong></p>
+<p>服务器进行多路混流和重新编码，视频会议场景等，对服务器硬件要求高。<br>优势很明显，场景体验好，节省带宽资源。<br>局限性也很明显，对服务器要求高，混流过程有一定的延时。</p>
+<h3 id="SFU方案"><a href="#SFU方案" class="headerlink" title="SFU方案"></a>SFU方案</h3><p><strong>Selective Forwarding Unit</strong></p>
+<p>服务器对多路流根据实际场景进行转发。</p>
+<h3 id="传输质量"><a href="#传输质量" class="headerlink" title="传输质量"></a>传输质量</h3><p><img src="/images/pic/QoS.png" alt="QoS"></p>
+<h3 id="流媒体传输协议"><a href="#流媒体传输协议" class="headerlink" title="流媒体传输协议"></a>流媒体传输协议</h3><p>传统直播推拉流架构的主要协议：HLS和RTMP协议。</p>
+<p>由于WebRTC传输数据基于UDP协议，RTMP基于TCP协议，HLS基于HTTP协议的特点，传输实时性：<code>WebRTC(RTCP/RTP) &gt; RTMP &gt; HLS</code></p>
+<ul>
+<li>WebRTC多用于实时音视频通信或互动场景</li>
+<li>RTMP多用于推拉流场景</li>
+<li>HLS多用于拉流端和点播场景</li>
+</ul>
+<p><img src="/images/pic/HLS.png" alt="HLS"></p>
+<h2 id="算法设计"><a href="#算法设计" class="headerlink" title="算法设计"></a>算法设计</h2><p>在实时传输中，一般使用UDP协议，因此需要对抗丢包，乱序，抖动等质量问题。在实时和可靠之间做权衡，一切都是trade-off。</p>
+<h3 id="NACK"><a href="#NACK" class="headerlink" title="NACK"></a>NACK</h3><h4 id="NACK-receiver"><a href="#NACK-receiver" class="headerlink" title="NACK receiver"></a>NACK receiver</h4><p>目标： 既要做到及时快速的重传，又要避免过多过久的重传，减少带宽的使用。</p>
+<p>思路1： 收到包时记录seq，定时检查最近1000个包里丢失了哪些，发送RTCP NACK请求。<br>问题：定时器间隔导致丢包不能快速请求。</p>
+<p>思路2： 思路1+每次收到包都触发一次快速请求重传。<br>问题：乱序时误重传，浪费带宽。</p>
+<p>思路3： 思路2+为避免即时和定时频繁发送NACK请求的问题，根据rtt推算是否在定时器触发时需要再次请求NACK，并记录包的重传次数，超过一定次数则停止再发重传请求。</p>
+<p>弱网环境下的补充：若重传队列过长，可清理至上一个keyframe处的seq。若队列还是过长，可直接清空重传队列，并发送RTCP PLI请求。</p>
+<h4 id="NACK-sender"><a href="#NACK-sender" class="headerlink" title="NACK sender"></a>NACK sender</h4>]]></content>
+      <categories>
+        <category>media</category>
       </categories>
   </entry>
   <entry>
@@ -497,6 +450,53 @@
 ]]></content>
       <categories>
         <category>media</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>HttpLongPolling</title>
+    <url>/2021/05/08/2021-05-09-http-long-polling/</url>
+    <content><![CDATA[<h3 id="HTTP推送技术-Push-technology"><a href="#HTTP推送技术-Push-technology" class="headerlink" title="HTTP推送技术 Push technology"></a>HTTP推送技术 Push technology</h3><p>传统的HTTP请求都是client主动发起到server的请求，若server有通知需要即时通知client时，需要推送技术。</p>
+<h4 id="常规轮询-Regular-Polling"><a href="#常规轮询-Regular-Polling" class="headerlink" title="常规轮询 Regular Polling"></a>常规轮询 Regular Polling</h4><p>每隔一段时间pull/get消息。</p>
+<ul>
+<li>没有消息时浪费资源。</li>
+<li>有消息时不能即时推送。</li>
+</ul>
+<h4 id="长轮询-Long-Polling"><a href="#长轮询-Long-Polling" class="headerlink" title="长轮询 Long Polling"></a>长轮询 Long Polling</h4><ol>
+<li><p>请求</p>
+<p>client发起请求并把keepalive时间设的较长，服务器收到消息并不立即返回，而是hold一段时间。</p>
+</li>
+<li><p>响应</p>
+<p>当有消息推送时，server立即返回消息。或server的connection hang timeout时，返回消息。server返回消息后，将连接关闭。</p>
+</li>
+<li><p>循环</p>
+<p> client收到response后，应立即再次发起请求。</p>
+</li>
+</ol>
+<h3 id="Long-Polling-vs-Websocket"><a href="#Long-Polling-vs-Websocket" class="headerlink" title="Long Polling vs Websocket"></a>Long Polling vs Websocket</h3><p>Long Polling并不是一种全新的协议，而是基于XMLHttpRequest实现了一种推送机制。最大的优点是过渡期的兼容性好，client无需新增协议，容易适配。<br>同个client若发起多个request连接，消息只返回一次，应通过本地缓存共享推送消息。</p>
+<p>websocket协议相对较晚出现，需要client和server端都支持websocket协议，尽管它的握手还是基于HTTP协议，但它在HTTP协议上实现了全双工通信。</p>
+<p>websocket几乎解决了Long Polling的所有缺点，只是被断开后不能自恢复。</p>
+<h3 id="Apollo在Long-polling的实践"><a href="#Apollo在Long-polling的实践" class="headerlink" title="Apollo在Long polling的实践"></a>Apollo在Long polling的实践</h3><p>Apollo是携程开源的配置中心，提供了带缓存和不带缓存的pull接口，和long polling即时变更推送接口。</p>
+<p>为了避免long polling机制的缺陷，使用了版本号等方案。</p>
+<ul>
+<li><p>Long polling获取的消息时，需要带上本地缓存的notificationId，server端判断client带过来的notificationId是否为最新，若需要更新则立即返回消息，否则等配置有更新才会返回，返回消息携带notificationId，client端更新缓存。这样做的好处是，即使中间断开连接，恢复连接后也可以对比本地是否需要更新配置信息。</p>
+</li>
+<li><p>client使用pull接口获取配置时，可填参数IP表示client的唯一Id，当需要灰度推送时，根据client携带的IP判断是否给它灰度配置。这样做的好处是，使用逻辑上的Id（IP），相同IP的client可以获取到相同的配置。</p>
+</li>
+<li><p>client使用pull接口获取配置时，可填参数releaseKey。Apollo每次发布配置时，会为新版本的配置生成releaseKey，使用常规轮询时server端无需每次都查表，可根据releaseKey判断是否需要读取配置。client也无需每次都更新本地缓存的配置。</p>
+</li>
+</ul>
+<img src='data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBjb250ZW50U3R5bGVUeXBlPSJ0ZXh0L2NzcyIgaGVpZ2h0PSI1ODRweCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgc3R5bGU9IndpZHRoOjY4MnB4O2hlaWdodDo1ODRweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA2ODIgNTg0IiB3aWR0aD0iNjgycHgiIHpvb21BbmRQYW49Im1hZ25pZnkiPjxkZWZzLz48Zz48ZWxsaXBzZSBjeD0iNDExLjM3NSIgY3k9IjIwIiBmaWxsPSIjMjIyMjIyIiByeD0iMTAiIHJ5PSIxMCIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxLjA7Ii8+PHBvbHlnb24gZmlsbD0iI0YxRjFGMSIgcG9pbnRzPSIzMjEuODc1LDEwMy45Njg4LDUwMC44NzUsMTAzLjk2ODgsNTEyLjg3NSwxMTUuOTY4OCw1MDAuODc1LDEyNy45Njg4LDMyMS44NzUsMTI3Ljk2ODgsMzA5Ljg3NSwxMTUuOTY4OCwzMjEuODc1LDEwMy45Njg4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIxNzkiIHg9IjMyMS44NzUiIHk9IjExOS43NzY5Ij5BcG9sbG8gY29uZmlnIG5vcm1hbCByZXNwb25zZT88L3RleHQ+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEiIHg9IjI4OC44NzUiIHk9IjExMy4zNzQ1Ij55ZXM8L3RleHQ+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQiIHg9IjUxMi44NzUiIHk9IjExMy4zNzQ1Ij5ubzwvdGV4dD48cG9seWdvbiBmaWxsPSIjRjFGMUYxIiBwb2ludHM9IjIwOC4yNSwxMzcuOTY4OCwzMDYuMjUsMTM3Ljk2ODgsMzE4LjI1LDE0OS45Njg4LDMwNi4yNSwxNjEuOTY4OCwyMDguMjUsMTYxLjk2ODgsMTk2LjI1LDE0OS45Njg4LDIwOC4yNSwxMzcuOTY4OCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iOTgiIHg9IjIwOC4yNSIgeT0iMTUzLjc3NjkiPmh0dHAgc3RhdHVzIGNvZGU/PC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxNDYiIHg9IjEwNC41IiB5PSIxOTcuNTc4MSIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjEyMiIgeD0iMTE4LjUiIHk9IjIxOC43MTY4Ij51cGRhdGUgbm90aWZpY2F0aW9uSWQ8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0YxRjFGMSIgcG9pbnRzPSIxMDcsMjUxLjU0NjksMjQ4LDI1MS41NDY5LDI2MCwyNjMuNTQ2OSwyNDgsMjc1LjU0NjksMTA3LDI3NS41NDY5LDk1LDI2My41NDY5LDEwNywyNTEuNTQ2OSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMTQxIiB4PSIxMDciIHk9IjI2Ny4zNTUiPkhUVFAgZ2V0IGNvbmZpZyBuZXdlc3Q/PC90ZXh0PjxyZWN0IGZpbGw9IiNGMUYxRjEiIGhlaWdodD0iMzMuOTY4OCIgcng9IjEyLjUiIHJ5PSIxMi41IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiIHdpZHRoPSIxMzgiIHg9IjExIiB5PSIzMTguMzUxNiIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjEyIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjExNCIgeD0iMjUiIHk9IjMzOS40OTAyIj51cGRhdGUgbG9jYWwgY2FjaGU8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg3IiB4PSIyMzEuNSIgeT0iMzE4LjM1MTYiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI2MyIgeD0iMjQ1LjUiIHk9IjMzOS40OTAyIj5ubyBjaGFuZ2U8L3RleHQ+PHBvbHlnb24gZmlsbD0iI0YxRjFGMSIgcG9pbnRzPSIxNzcuNSwzOTkuMjQyMiwxNzcuNSwzOTkuMjQyMiwxODkuNSw0MTEuMjQyMiwxNzcuNSw0MjMuMjQyMiwxNzcuNSw0MjMuMjQyMiwxNjUuNSw0MTEuMjQyMiwxNzcuNSwzOTkuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg3IiB4PSIzMzguNSIgeT0iMTk3LjU3ODEiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI2MyIgeD0iMzUyLjUiIHk9IjIxOC43MTY4Ij5ubyBjaGFuZ2U8L3RleHQ+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjU2IiB4PSI0NDUuNSIgeT0iMTk3LjU3ODEiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzMiIgeD0iNDU5LjUiIHk9IjIxOC43MTY4Ij5vdGhlcjwvdGV4dD48cG9seWdvbiBmaWxsPSIjRjFGMUYxIiBwb2ludHM9IjI1Ny4yNSw0MzMuMjQyMiwyNTcuMjUsNDMzLjI0MjIsMjY5LjI1LDQ0NS4yNDIyLDI1Ny4yNSw0NTcuMjQyMiwyNTcuMjUsNDU3LjI0MjIsMjQ1LjI1LDQ0NS4yNDIyLDI1Ny4yNSw0MzMuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9Ijg0IiB4PSI1MjMuNSIgeT0iMTM3Ljk2ODgiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI2MCIgeD0iNTM3LjUiIHk9IjE1OS4xMDc0Ij5IdHRwIGVycm9yPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGMUYxRjEiIHBvaW50cz0iNDExLjM3NSw0NjMuMjQyMiw0MjMuMzc1LDQ3NS4yNDIyLDQxMS4zNzUsNDg3LjI0MjIsMzk5LjM3NSw0NzUuMjQyMiw0MTEuMzc1LDQ2My4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjAuNTsiLz48cmVjdCBmaWxsPSIjRjFGMUYxIiBoZWlnaHQ9IjMzLjk2ODgiIHJ4PSIxMi41IiByeT0iMTIuNSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7IiB3aWR0aD0iODciIHg9IjM2Ny44NzUiIHk9IjUwIi8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTIiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iNjciIHg9IjM3Ny44NzUiIHk9IjcxLjEzODciPkxvbmdQb2xsaW5nPC90ZXh0Pjxwb2x5Z29uIGZpbGw9IiNGMUYxRjEiIHBvaW50cz0iNDExLjM3NSw1MDcuMjQyMiw0MTEuMzc1LDUwNy4yNDIyLDQyMy4zNzUsNTE5LjI0MjIsNDExLjM3NSw1MzEuMjQyMiw0MTEuMzc1LDUzMS4yNDIyLDM5OS4zNzUsNTE5LjI0MjIsNDExLjM3NSw1MDcuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDowLjU7Ii8+PHJlY3QgZmlsbD0iI0YxRjFGMSIgaGVpZ2h0PSIzMy45Njg4IiByeD0iMTIuNSIgcnk9IjEyLjUiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MC41OyIgd2lkdGg9IjU0IiB4PSI2MTcuNSIgeT0iMzQ1LjI3MzQiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMiIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIzNCIgeD0iNjI3LjUiIHk9IjM2Ni40MTIxIj5zbGVlcDwvdGV4dD48ZWxsaXBzZSBjeD0iNDExLjM3NSIgY3k9IjU2Mi4yNDIyIiByeD0iMTEiIHJ5PSIxMSIgc3R5bGU9InN0cm9rZTojMjIyMjIyO3N0cm9rZS13aWR0aDoxLjA7ZmlsbDpub25lOyIvPjxlbGxpcHNlIGN4PSI0MTEuMzc1IiBjeT0iNTYyLjI0MjIiIGZpbGw9IiMyMjIyMjIiIHJ4PSI2IiByeT0iNiIgc3R5bGU9InN0cm9rZTojMTExMTExO3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iOTUiIHgyPSI4MCIgeTE9IjI2My41NDY5IiB5Mj0iMjYzLjU0NjkiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI4MCIgeDI9IjgwIiB5MT0iMjYzLjU0NjkiIHkyPSIzMTguMzUxNiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNzYsMzA4LjM1MTYsODAsMzE4LjM1MTYsODQsMzA4LjM1MTYsODAsMzEyLjM1MTYiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjIxIiB4PSI4MCIgeT0iMjk2Ljg1MTYiPjIwMDwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIyNjAiIHgyPSIyNzUiIHkxPSIyNjMuNTQ2OSIgeTI9IjI2My41NDY5Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjc1IiB4Mj0iMjc1IiB5MT0iMjYzLjU0NjkiIHkyPSIzMTguMzUxNiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjcxLDMwOC4zNTE2LDI3NSwzMTguMzUxNiwyNzksMzA4LjM1MTYsMjc1LDMxMi4zNTE2IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48dGV4dCBmaWxsPSIjMDAwMDAwIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSIyMSIgeD0iMjc1IiB5PSIyOTYuODUxNiI+MzA0PC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjgwIiB4Mj0iODAiIHkxPSIzNTIuMzIwMyIgeTI9IjQxMS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iODAiIHgyPSIxNjUuNSIgeTE9IjQxMS4yNDIyIiB5Mj0iNDExLjI0MjIiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE1NS41LDQwNy4yNDIyLDE2NS41LDQxMS4yNDIyLDE1NS41LDQxNS4yNDIyLDE1OS41LDQxMS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIyNzUiIHgyPSIyNzUiIHkxPSIzNTIuMzIwMyIgeTI9IjQxMS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjc1IiB4Mj0iMTg5LjUiIHkxPSI0MTEuMjQyMiIgeTI9IjQxMS4yNDIyIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIxOTkuNSw0MDcuMjQyMiwxODkuNSw0MTEuMjQyMiwxOTkuNSw0MTUuMjQyMiwxOTUuNSw0MTEuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMTc3LjUiIHgyPSIxNzcuNSIgeTE9IjIzMS41NDY5IiB5Mj0iMjUxLjU0NjkiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjE3My41LDI0MS41NDY5LDE3Ny41LDI1MS41NDY5LDE4MS41LDI0MS41NDY5LDE3Ny41LDI0NS41NDY5IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIxOTYuMjUiIHgyPSIxNzcuNSIgeTE9IjE0OS45Njg4IiB5Mj0iMTQ5Ljk2ODgiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIxNzcuNSIgeDI9IjE3Ny41IiB5MT0iMTQ5Ljk2ODgiIHkyPSIxOTcuNTc4MSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMTczLjUsMTg3LjU3ODEsMTc3LjUsMTk3LjU3ODEsMTgxLjUsMTg3LjU3ODEsMTc3LjUsMTkxLjU3ODEiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjIxIiB4PSIxNzcuNSIgeT0iMTc3LjU4MTUiPjIwMDwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIzMTguMjUiIHgyPSI0NzMuNSIgeTE9IjE0OS45Njg4IiB5Mj0iMTQ5Ljk2ODgiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI0NzMuNSIgeDI9IjQ3My41IiB5MT0iMTQ5Ljk2ODgiIHkyPSIxOTcuNTc4MSIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDY5LjUsMTg3LjU3ODEsNDczLjUsMTk3LjU3ODEsNDc3LjUsMTg3LjU3ODEsNDczLjUsMTkxLjU3ODEiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjx0ZXh0IGZpbGw9IiMwMDAwMDAiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjExIiBsZW5ndGhBZGp1c3Q9InNwYWNpbmciIHRleHRMZW5ndGg9IjMwIiB4PSI0NzMuNSIgeT0iMTc3LjU4MTUiPm90aGVyPC90ZXh0PjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjM4MiIgeDI9IjM4MiIgeTE9IjE0OS45Njg4IiB5Mj0iMTk3LjU3ODEiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjM3OCwxODcuNTc4MSwzODIsMTk3LjU3ODEsMzg2LDE4Ny41NzgxLDM4MiwxOTEuNTc4MSIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxlbmd0aEFkanVzdD0ic3BhY2luZyIgdGV4dExlbmd0aD0iMjEiIHg9IjM4MiIgeT0iMTcyLjU4MTUiPjMwNDwvdGV4dD48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIxNzcuNSIgeDI9IjE3Ny41IiB5MT0iNDIzLjI0MjIiIHkyPSI0NDUuMjQyMiIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjE3Ny41IiB4Mj0iMjQ1LjI1IiB5MT0iNDQ1LjI0MjIiIHkyPSI0NDUuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjM1LjI1LDQ0MS4yNDIyLDI0NS4yNSw0NDUuMjQyMiwyMzUuMjUsNDQ5LjI0MjIsMjM5LjI1LDQ0NS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI0NzMuNSIgeDI9IjQ3My41IiB5MT0iMjMxLjU0NjkiIHkyPSI0NDUuMjQyMiIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjQ3My41IiB4Mj0iMjY5LjI1IiB5MT0iNDQ1LjI0MjIiIHkyPSI0NDUuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjc5LjI1LDQ0MS4yNDIyLDI2OS4yNSw0NDUuMjQyMiwyNzkuMjUsNDQ5LjI0MjIsMjc1LjI1LDQ0NS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIzODIiIHgyPSIzODIiIHkxPSIyMzEuNTQ2OSIgeTI9IjQ0NS4yNDIyIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSIzNzgsNDM1LjI0MjIsMzgyLDQ0NS4yNDIyLDM4Niw0MzUuMjQyMiwzODIsNDM5LjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjMwOS44NzUiIHgyPSIyNTcuMjUiIHkxPSIxMTUuOTY4OCIgeTI9IjExNS45Njg4Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjU3LjI1IiB4Mj0iMjU3LjI1IiB5MT0iMTE1Ljk2ODgiIHkyPSIxMzcuOTY4OCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iMjUzLjI1LDEyNy45Njg4LDI1Ny4yNSwxMzcuOTY4OCwyNjEuMjUsMTI3Ljk2ODgsMjU3LjI1LDEzMS45Njg4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI1MTIuODc1IiB4Mj0iNTY1LjUiIHkxPSIxMTUuOTY4OCIgeTI9IjExNS45Njg4Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNTY1LjUiIHgyPSI1NjUuNSIgeTE9IjExNS45Njg4IiB5Mj0iMTM3Ljk2ODgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjU2MS41LDEyNy45Njg4LDU2NS41LDEzNy45Njg4LDU2OS41LDEyNy45Njg4LDU2NS41LDEzMS45Njg4IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSIyNTcuMjUiIHgyPSIyNTcuMjUiIHkxPSI0NTcuMjQyMiIgeTI9IjQ3NS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iMjU3LjI1IiB4Mj0iMzk5LjM3NSIgeTE9IjQ3NS4yNDIyIiB5Mj0iNDc1LjI0MjIiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjM4OS4zNzUsNDcxLjI0MjIsMzk5LjM3NSw0NzUuMjQyMiwzODkuMzc1LDQ3OS4yNDIyLDM5My4zNzUsNDc1LjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjU2NS41IiB4Mj0iNTY1LjUiIHkxPSIxNzEuOTM3NSIgeTI9IjQ3NS4yNDIyIi8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNTY1LjUiIHgyPSI0MjMuMzc1IiB5MT0iNDc1LjI0MjIiIHkyPSI0NzUuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDMzLjM3NSw0NzEuMjQyMiw0MjMuMzc1LDQ3NS4yNDIyLDQzMy4zNzUsNDc5LjI0MjIsNDI5LjM3NSw0NzUuMjQyMiIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNDExLjM3NSIgeDI9IjQxMS4zNzUiIHkxPSI4My45Njg4IiB5Mj0iMTAzLjk2ODgiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjQwNy4zNzUsOTMuOTY4OCw0MTEuMzc1LDEwMy45Njg4LDQxNS4zNzUsOTMuOTY4OCw0MTEuMzc1LDk3Ljk2ODgiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjQyMy4zNzUiIHgyPSI2NDQuNSIgeTE9IjUxOS4yNDIyIiB5Mj0iNTE5LjI0MjIiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI2NDQuNSIgeDI9IjY0NC41IiB5MT0iMzc5LjI0MjIiIHkyPSI1MTkuMjQyMiIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNjQwLjUsMzg5LjI0MjIsNjQ0LjUsMzc5LjI0MjIsNjQ4LjUsMzg5LjI0MjIsNjQ0LjUsMzg1LjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjY0NC41IiB4Mj0iNjQ0LjUiIHkxPSI2Ni45ODQ0IiB5Mj0iMzQ1LjI3MzQiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI2NDQuNSIgeDI9IjQ1NC44NzUiIHkxPSI2Ni45ODQ0IiB5Mj0iNjYuOTg0NCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDY0Ljg3NSw2Mi45ODQ0LDQ1NC44NzUsNjYuOTg0NCw0NjQuODc1LDcwLjk4NDQsNDYwLjg3NSw2Ni45ODQ0IiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48bGluZSBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiIHgxPSI0MTEuMzc1IiB4Mj0iNDExLjM3NSIgeTE9IjQ4Ny4yNDIyIiB5Mj0iNTA3LjI0MjIiLz48cG9seWdvbiBmaWxsPSIjMTgxODE4IiBwb2ludHM9IjQwNy4zNzUsNDk3LjI0MjIsNDExLjM3NSw1MDcuMjQyMiw0MTUuMzc1LDQ5Ny4yNDIyLDQxMS4zNzUsNTAxLjI0MjIiIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIvPjxsaW5lIHN0eWxlPSJzdHJva2U6IzE4MTgxODtzdHJva2Utd2lkdGg6MS4wOyIgeDE9IjQxMS4zNzUiIHgyPSI0MTEuMzc1IiB5MT0iMzAiIHkyPSI1MCIvPjxwb2x5Z29uIGZpbGw9IiMxODE4MTgiIHBvaW50cz0iNDA3LjM3NSw0MCw0MTEuMzc1LDUwLDQxNS4zNzUsNDAsNDExLjM3NSw0NCIgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7Ii8+PGxpbmUgc3R5bGU9InN0cm9rZTojMTgxODE4O3N0cm9rZS13aWR0aDoxLjA7IiB4MT0iNDExLjM3NSIgeDI9IjQxMS4zNzUiIHkxPSI1MzEuMjQyMiIgeTI9IjU1MS4yNDIyIi8+PHBvbHlnb24gZmlsbD0iIzE4MTgxOCIgcG9pbnRzPSI0MDcuMzc1LDU0MS4yNDIyLDQxMS4zNzUsNTUxLjI0MjIsNDE1LjM3NSw1NDEuMjQyMiw0MTEuMzc1LDU0NS4yNDIyIiBzdHlsZT0ic3Ryb2tlOiMxODE4MTg7c3Ryb2tlLXdpZHRoOjEuMDsiLz48IS0tTUQ1PVsxMmFmNGQ0YTcwOWUxMmY3NzhlNWUxZGEyODFlYzZmM10KQHN0YXJ0dW1sDQpzdGFydCANCg0KcmVwZWF0IDpMb25nUG9sbGluZzsNCmlmIChBcG9sbG8gY29uZmlnIG5vcm1hbCByZXNwb25zZT8pIHRoZW4gKHllcykNCiAgICBzd2l0Y2ggKGh0dHAgc3RhdHVzIGNvZGU/KSANCiAgICBjYXNlICgyMDApDQogICAgICAgIDogdXBkYXRlIG5vdGlmaWNhdGlvbklkOw0KICAgICAgICBzd2l0Y2ggKEhUVFAgZ2V0IGNvbmZpZyBuZXdlc3Q/KQ0KICAgICAgICAgICAgY2FzZSAoMjAwKQ0KICAgICAgICAgICAgICAgIDogdXBkYXRlIGxvY2FsIGNhY2hlOw0KICAgICAgICAgICAgY2FzZSAoMzA0KQ0KICAgICAgICAgICAgICAgIDogbm8gY2hhbmdlOw0KICAgICAgICBlbmRzd2l0Y2gNCiAgICBjYXNlICgzMDQpDQogICAgICAgIDogbm8gY2hhbmdlOw0KICAgIGNhc2UgKG90aGVyKQ0KICAgICAgICA6IG90aGVyOw0KICAgIGVuZHN3aXRjaA0KZWxzZSAobm8pDQogICAgOiBIdHRwIGVycm9yOw0KZW5kaWYNCg0KYmFja3dhcmQgOnNsZWVwOw0KcmVwZWF0IHdoaWxlICgpDQpzdG9wDQpAZW5kdW1sDQoKUGxhbnRVTUwgdmVyc2lvbiAxLjIwMjIuN2JldGExKFVua25vd24gY29tcGlsZSB0aW1lKQooR1BMIHNvdXJjZSBkaXN0cmlidXRpb24pCkphdmEgUnVudGltZTogSmF2YShUTSkgU0UgUnVudGltZSBFbnZpcm9ubWVudApKVk06IEphdmEgSG90U3BvdChUTSkgNjQtQml0IFNlcnZlciBWTQpEZWZhdWx0IEVuY29kaW5nOiBVVEYtOApMYW5ndWFnZTogZW4KQ291bnRyeTogVVMKLS0+PC9nPjwvc3ZnPg=='>
+
+<ul>
+<li><p>流程图不需要考虑很严谨的逻辑，因为有版本号，即使中间有异常，下次轮询的时候也可以恢复。</p>
+</li>
+<li><p>做好降级策略，定期轮询，防止路由策略等导致的long polling服务不可用。</p>
+</li>
+</ul>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://ably.com/blog/websockets-vs-long-polling">https://ably.com/blog/websockets-vs-long-polling</a></p>
+]]></content>
+      <categories>
+        <category>protocol</category>
       </categories>
   </entry>
   <entry>
@@ -564,11 +564,11 @@
 <p>streamInfo是处理媒体流的上下文，用于在interceptor之间传递信息。</p>
 <p>对外提供registry结构体，在chain上的又一层封装，暴露Add和Build接口。</p>
 <p>它提供了一个<code>type NoOp struct&#123;&#125;</code>的结构体，任何需要实例化interceptor的结构体都可以继承它。</p>
-<h4 id="NACK-interceptor的实现"><a href="#NACK-interceptor的实现" class="headerlink" title="NACK interceptor的实现"></a>NACK interceptor的实现</h4><p><code>GeneratorInterceptor</code> 是NACK interceptor对外提供的接口。</p>
+<h4 id="NACK-interceptor的实现"><a href="#NACK-interceptor的实现" class="headerlink" title="NACK interceptor的实现"></a>NACK interceptor的实现</h4><h5 id="GeneratorInterceptor-receiver的实现"><a href="#GeneratorInterceptor-receiver的实现" class="headerlink" title="GeneratorInterceptor receiver的实现"></a>GeneratorInterceptor receiver的实现</h5><p><code>GeneratorInterceptor</code> 是NACK interceptor对外提供的接收端接口。</p>
 <figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> GeneratorInterceptor <span class="keyword">struct</span> &#123;</span><br><span class="line">	interceptor.NoOp <span class="comment">// 继承interceptor</span></span><br><span class="line">	size      <span class="keyword">uint16</span> <span class="comment">// receiveLog参数</span></span><br><span class="line">	skipLastN <span class="keyword">uint16</span> <span class="comment">// receiveLog参数</span></span><br><span class="line">	interval  time.Duration <span class="comment">// 发送RTCP包间隔</span></span><br><span class="line">	m         sync.Mutex <span class="comment">// 这个结构体的锁</span></span><br><span class="line">	wg        sync.WaitGroup <span class="comment">// RTCP writer loop结束才可以关闭的控制</span></span><br><span class="line">	<span class="built_in">close</span>     <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125; <span class="comment">// 控制关闭</span></span><br><span class="line">	log       logging.LeveledLogger</span><br><span class="line"></span><br><span class="line">	receiveLogs   <span class="keyword">map</span>[<span class="keyword">uint32</span>]*receiveLog <span class="comment">// 记录了接收到的sequence number， key为SSRC</span></span><br><span class="line">	receiveLogsMu sync.Mutex <span class="comment">// receiveLog的map锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h5 id="状态控制"><a href="#状态控制" class="headerlink" title="状态控制"></a>状态控制</h5><p>实例化了interceptor的 <code>UnbindLocalStream</code>和<code>BindRemoteStream</code> 用于处理收到的RTP包， 在收到RTP包时将seq num记录在对应SSRC的receiveLog里。<br>实例化了interceptor的 <code>BindRTCPWriter</code> 用于反馈RTCP包，这里起了一个goroutine异步处理， 按定时器间隔来检查receiveLog。</p>
-<h5 id="receiveLog实现"><a href="#receiveLog实现" class="headerlink" title="receiveLog实现"></a>receiveLog实现</h5><p>receiveLog是interceptor里实现NACK的重要结构体，它记录了一段连续的包是否收到的情况。</p>
+<h6 id="状态控制"><a href="#状态控制" class="headerlink" title="状态控制"></a>状态控制</h6><p>实例化了interceptor的 <code>UnbindLocalStream</code>和<code>BindRemoteStream</code> 用于处理收到的RTP包， 在收到RTP包时将seq num记录在对应SSRC的receiveLog里。<br>实例化了interceptor的 <code>BindRTCPWriter</code> 用于反馈RTCP包，这里起了一个goroutine异步处理， 按定时器间隔来检查receiveLog。</p>
+<h6 id="receiveLog实现"><a href="#receiveLog实现" class="headerlink" title="receiveLog实现"></a>receiveLog实现</h6><p>receiveLog是interceptor里实现NACK的重要结构体，它记录了一段连续的包是否收到的情况。</p>
 <figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> receiveLog <span class="keyword">struct</span> &#123;</span><br><span class="line">	packets         []<span class="keyword">uint64</span> <span class="comment">// 记录RTP每个包是否收到的bitmap，使用uint64可标识64个包，因此size必须为64的整数倍</span></span><br><span class="line">	size            <span class="keyword">uint16</span> <span class="comment">// 可记录连续的RTP包的总数量</span></span><br><span class="line">	end             <span class="keyword">uint16</span> <span class="comment">// 记录收到的最后一个seq</span></span><br><span class="line">	started         <span class="keyword">bool</span> <span class="comment">// 第一个包，初始化上下文</span></span><br><span class="line">	lastConsecutive <span class="keyword">uint16</span> <span class="comment">// 记录收到的最后一个连续的seq，查找丢失包时，遍历它到end之间即可</span></span><br><span class="line">	m               sync.RWMutex <span class="comment">// 并发锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>使用uint64数组当bitmap，记录收到的RTP包，收到时将bit置1，删除时置0。</p>
@@ -578,7 +578,18 @@
 <figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *receiveLog)</span> <span class="title">fixLastConsecutive</span><span class="params">()</span></span> &#123;</span><br><span class="line">	i := s.lastConsecutive + <span class="number">1</span></span><br><span class="line">	<span class="keyword">for</span> ; i != s.end+<span class="number">1</span> &amp;&amp; s.getReceived(i); i++ &#123;</span><br><span class="line">		<span class="comment">// find all consecutive packets</span></span><br><span class="line">	&#125;</span><br><span class="line">	s.lastConsecutive = i - <span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>由于bitmap的size标识的是一段时间内需要重传的RTP包，每收到一个新的seq时，需要判断这段buffer是否翻转，并清空从end到seq之间的记录。</p>
-<h4 id="TWCC-interceptor的实现"><a href="#TWCC-interceptor的实现" class="headerlink" title="TWCC interceptor的实现"></a>TWCC interceptor的实现</h4><h4 id="SR-RR-interceptor的实现"><a href="#SR-RR-interceptor的实现" class="headerlink" title="SR/RR interceptor的实现"></a>SR/RR interceptor的实现</h4><h2 id="ion-sfu"><a href="#ion-sfu" class="headerlink" title="ion-sfu"></a>ion-sfu</h2><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
+<h6 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h6><p>算法简单，使用bitmap记录seq，节省内存空间并且查找高效。</p>
+<h6 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h6><p>定时器触发NACK请求，重传间隔受定时器间隔影响，实时性不高。<br>没有根据rtt评估是否需要请求重传，在乱序时导致误重传。<br>没有根据retries重试次数来做策略，可能会在网络拥塞严重时一直请求重传，进一步加大了网络拥塞程度。</p>
+<h5 id="ResponderInterceptor-sender的实现"><a href="#ResponderInterceptor-sender的实现" class="headerlink" title="ResponderInterceptor sender的实现"></a>ResponderInterceptor sender的实现</h5><p><code>ResponderInterceptor</code> 是NACK interceptor对外提供的发送端接口。</p>
+<figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> ResponderInterceptor <span class="keyword">struct</span> &#123;</span><br><span class="line">	interceptor.NoOp <span class="comment">// 继承interceptor</span></span><br><span class="line">	size          <span class="keyword">uint16</span> <span class="comment">// sendBuffer缓存包的数量</span></span><br><span class="line">	log           logging.LeveledLogger</span><br><span class="line">	packetFactory packetFactory <span class="comment">// 提供可定制化packet管理接口，也有默认的packetManager</span></span><br><span class="line"></span><br><span class="line">	streams   <span class="keyword">map</span>[<span class="keyword">uint32</span>]*localStream <span class="comment">// 缓存每个SSRC的包队列</span></span><br><span class="line">	streamsMu sync.Mutex <span class="comment">// streams的map锁</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> localStream <span class="keyword">struct</span> &#123;</span><br><span class="line">	sendBuffer *sendBuffer <span class="comment">// 发送缓存</span></span><br><span class="line">	rtpWriter  interceptor.RTPWriter <span class="comment">// 注册用于发送重传包的回调函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>缓存每个SSRC的发送包，并且注册一个回调函数，用于发送重传包。<br>当收到RTCP NACK请求时，在缓存中查找需要重传的包，并发送给对方。</p>
+<h6 id="sendBuffer实现"><a href="#sendBuffer实现" class="headerlink" title="sendBuffer实现"></a>sendBuffer实现</h6><p><code>sendBuffer</code>是发送端缓存，存储最近发送的包，参数<code>size</code>指定缓存的大小。size只能为2的幂次方倍。</p>
+<figure class="highlight golang"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> sendBuffer <span class="keyword">struct</span> &#123;</span><br><span class="line">	packets   []*retainablePacket</span><br><span class="line">	size      <span class="keyword">uint16</span></span><br><span class="line">	lastAdded <span class="keyword">uint16</span></span><br><span class="line">	started   <span class="keyword">bool</span></span><br><span class="line"></span><br><span class="line">	m sync.RWMutex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id=""><a href="#" class="headerlink" title=""></a></h6><h4 id="TWCC-interceptor的实现"><a href="#TWCC-interceptor的实现" class="headerlink" title="TWCC interceptor的实现"></a>TWCC interceptor的实现</h4><h4 id="SR-RR-interceptor的实现"><a href="#SR-RR-interceptor的实现" class="headerlink" title="SR/RR interceptor的实现"></a>SR/RR interceptor的实现</h4><h2 id="ion-sfu"><a href="#ion-sfu" class="headerlink" title="ion-sfu"></a>ion-sfu</h2><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><blockquote>
 <p>通过设置环境变量改变pion log的日志级别，例如： export PION_LOG_TRACE=all </p>
 </blockquote>
 ]]></content>

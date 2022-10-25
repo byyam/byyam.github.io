@@ -154,19 +154,19 @@ mediasoup支持双向的dtls连接，dtls之后将密钥导出到ice的connectio
 ``` golang
 
     // 不使用pem证书文件，自签名生成证书，对证书计算摘要
-	var tlsCerts []tls.Certificate
-	certificate, err := selfsign.GenerateSelfSigned()
-	if err != nil {
-		return mediasoupFPs, tlsCerts, err
-	}
-	x509cert, err := x509.ParseCertificate(certificate.Certificate[0])
-	if err != nil {
-		return mediasoupFPs, tlsCerts, err
-	}
-	actualSHA256, err := fingerprint.Fingerprint(x509cert, crypto.SHA256)
-	if err != nil {
-		return mediasoupFPs, tlsCerts, err
-	}
+    var tlsCerts []tls.Certificate
+    certificate, err := selfsign.GenerateSelfSigned()
+    if err != nil {
+        return mediasoupFPs, tlsCerts, err
+    }
+    x509cert, err := x509.ParseCertificate(certificate.Certificate[0])
+    if err != nil {
+        return mediasoupFPs, tlsCerts, err
+    }
+    actualSHA256, err := fingerprint.Fingerprint(x509cert, crypto.SHA256)
+    if err != nil {
+        return mediasoupFPs, tlsCerts, err
+    }
 
 ```
 
@@ -174,15 +174,15 @@ mediasoup支持双向的dtls连接，dtls之后将密钥导出到ice的connectio
 
 ``` golang
 
-	config := &dtls.Config{
-		Certificates:         tlsCerts,
-		ExtendedMasterSecret: dtls.RequireExtendedMasterSecret,
-		// Create timeout context for accepted connection.
-		ConnectContextMaker: func() (context.Context, func()) {
-			return context.WithTimeout(context.Background(), 30*time.Second)
-		},
-		SRTPProtectionProfiles: []dtls.SRTPProtectionProfile{dtls.SRTP_AES128_CM_HMAC_SHA1_80},
-	}
+    config := &dtls.Config{
+        Certificates:         tlsCerts,
+        ExtendedMasterSecret: dtls.RequireExtendedMasterSecret,
+        // Create timeout context for accepted connection.
+        ConnectContextMaker: func() (context.Context, func()) {
+            return context.WithTimeout(context.Background(), 30*time.Second)
+        },
+        SRTPProtectionProfiles: []dtls.SRTPProtectionProfile{dtls.SRTP_AES128_CM_HMAC_SHA1_80},
+    }
 
     dtlsConn, err := dtls.Server(iceConn, config) // or Client
 
@@ -198,14 +198,14 @@ srtp不需要对整个数据包进行加密，因此收发数据仍然是在ice�
 ``` golang
 
     // 导出dtls密钥
-	srtpConfig := &srtp.Config{
-		Profile: srtp.ProtectionProfileAes128CmHmacSha1_80,
-	}
+    srtpConfig := &srtp.Config{
+        Profile: srtp.ProtectionProfileAes128CmHmacSha1_80,
+    }
 
-	connState := dtlsConn.ConnectionState()
-	if err := srtpConfig.ExtractSessionKeysFromDTLS(&connState, false); err != nil {
-		return nil, fmt.Errorf("errDtlsKeyExtractionFailed: %v", err)
-	}
+    connState := dtlsConn.ConnectionState()
+    if err := srtpConfig.ExtractSessionKeysFromDTLS(&connState, false); err != nil {
+        return nil, fmt.Errorf("errDtlsKeyExtractionFailed: %v", err)
+    }
 
     // 建立srtp session
     srtpSession, err := srtp.NewSessionSRTP(iceConn, srtpConfig)

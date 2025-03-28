@@ -37,9 +37,6 @@ $link-hover-color             = $black-deep;
 $link-hover-color-dark        = $gainsboro;
 $link-decoration-color        = $grey-dark;
 
-$blockquote-color             = $grey-dim;
-$blockquote-color-dark        = $grey;
-
 // Global border color.
 $border-color                 = $grey-light;
 
@@ -85,6 +82,8 @@ $font-family-posts        = get_font_family('posts'), $font-family-base if get_f
 
 $font-family-monospace    = consolas, Menlo, monospace, $font-family-chinese;
 $font-family-monospace    = get_font_family('codes'), consolas, Menlo, monospace, $font-family-chinese if get_font_family('codes');
+
+$font-family-icons        = 'FontAwesome';
 
 
 // Font size
@@ -217,7 +216,7 @@ $posts-collapse-margin-mobile   = 0px;
 
 $sidebar-padding                      = hexo-config('sidebar.padding') is a 'unit' ? unit(hexo-config('sidebar.padding'), px) : 18px;
 $sidebar-offset                       = hexo-config('sidebar.offset') is a 'unit' ? unit(hexo-config('sidebar.offset'), px) : 12px;
-$sidebar-nav-color                    = $grey-dim;
+$sidebar-nav-color                    = $black-light;
 $sidebar-nav-hover-color              = $whitesmoke;
 $sidebar-highlight                    = $blue-bright;
 
